@@ -1,4 +1,5 @@
 import * as argon2 from "@node-rs/argon2";
+import { users } from "../../db/auth-schema.js";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -18,11 +19,13 @@ export default defineEventHandler(async (event) => {
 
     try {
       // Insert user data into database
-      const user = await db.user.create({
-        data: { name: name, email: email, password: hashedPassword },
-      });
+      const user = await db.insert(users).values({
+        username: name,
+        email: email,
+        hashedPassword: hashedPassword
+      }).returning();
 
-      const userData = { username: user.name };
+      const userData = { username: user.username };
       await setUserSession(event, {
         user: userData,
         loggedInAt: new Date(),

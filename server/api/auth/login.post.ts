@@ -22,21 +22,19 @@ export default defineEventHandler(async (event) => {
     }
 
     const db = useDB(); // Initialize database connection
-    const user = await db.user.findUnique({
-      where: {
-        email: email,
-      },
+    const user = await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.email, email),
     });
 
     // For security reasons, do not specify if username or password is incorrect
-    if (!user || !(await argon2.verify(user.password, password))) {
+    if (!user || !(await argon2.verify(user.hashedPassword, password))) {
       console.error(`Invalid email or password for user: ${email}`);
       return createError({
         statusCode: 401,
         statusMessage: "Invalid email or password",
       });
     } else {
-      const userData = { username: user.name };
+      const userData = { username: user.username };
       await setUserSession(event, {
         user: userData,
         loggedInAt: new Date(),
