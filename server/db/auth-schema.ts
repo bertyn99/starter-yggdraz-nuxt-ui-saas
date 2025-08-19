@@ -1,5 +1,5 @@
-import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core';
-import { sql, relations } from 'drizzle-orm';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { sql, relations } from 'drizzle-orm'
 import crypto from 'node:crypto'
 
 // =================================================================
@@ -8,48 +8,48 @@ import crypto from 'node:crypto'
 
 // The core `users` table holds identity information.
 export const users = sqliteTable('users', {
-    id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-    email: text('email').notNull().unique(),
-    emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
-    username: text('username').notNull().unique(),
-    firstName: text('first_name'),
-    lastName: text('last_name'),
-    phoneNumber: text('phone_number'),
-    role: text('role', { enum: ["user", "admin", "staff"] }).default('user'),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
-});
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  email: text('email').notNull().unique(),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
+  username: text('username').notNull().unique(),
+  firstName: text('first_name'),
+  lastName: text('last_name'),
+  phoneNumber: text('phone_number'),
+  role: text('role', { enum: ['user', 'admin', 'staff'] }).default('user'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
+})
 
 // The `accounts` table links OAuth providers to users.
 export const accounts = sqliteTable('accounts', {
-    id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-    provider: text('provider', { enum: ["credentials", "google", "facebook", "apple", "twitter", "github"] }).notNull(), // e.g., 'google', 'facebook'
-    providerAccountId: text('provider_account_id').notNull(),
-    userId: text('user_id').references(() => users.id).notNull(),
-    // OAuth provider tokens
-    accessToken: text('access_token'),
-    refreshToken: text('refresh_token'),
-    accessTokenExpiresAt: integer('expires_at'),
-    refreshTokenExpiresAt: integer('refresh_token_expires_at'),
-    token_type: text('token_type'),
-    scope: text('scope'),
-    id_token: text('id_token'),
-    hashedPassword: text('hashed_password'),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
-});
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  provider: text('provider', { enum: ['credentials', 'google', 'facebook', 'apple', 'twitter', 'github'] }).notNull(), // e.g., 'google', 'facebook'
+  providerAccountId: text('provider_account_id').notNull(),
+  userId: text('user_id').references(() => users.id).notNull(),
+  // OAuth provider tokens
+  accessToken: text('access_token'),
+  refreshToken: text('refresh_token'),
+  accessTokenExpiresAt: integer('expires_at'),
+  refreshTokenExpiresAt: integer('refresh_token_expires_at'),
+  token_type: text('token_type'),
+  scope: text('scope'),
+  id_token: text('id_token'),
+  hashedPassword: text('hashed_password'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
+})
 
 // The `sessions` table stores user sessions for authentication.
 export const sessions = sqliteTable('sessions', {
-    id: text('id').primaryKey().$defaultFn(() => crypto.randomBytes(12).toString('hex')),
-    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
-    token: text('token').notNull(),
-    userAgent: text('user_agent'),
-    ipAddress: text('ip_address'),
-    expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
-});
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomBytes(12).toString('hex')),
+  userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  token: text('token').notNull(),
+  userAgent: text('user_agent'),
+  ipAddress: text('ip_address'),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
+})
 
 // =================================================================
 // ORGANIZATION SCHEMA
@@ -119,19 +119,19 @@ export const rolesToPermissions = sqliteTable('roles_to_permissions', {
 // =================================================================
 
 export const usersRelations = {
-    accounts: relations('accounts', {
-        fields: [users.id],
-        references: [accounts.userId]
-    }),
-    sessions: relations('sessions', {
-        fields: [users.id],
-        references: [sessions.userId]
-    }),
-    /* organizations: relations('organizations', {
+  accounts: relations('accounts', {
+    fields: [users.id],
+    references: [accounts.userId]
+  }),
+  sessions: relations('sessions', {
+    fields: [users.id],
+    references: [sessions.userId]
+  })
+  /* organizations: relations('organizations', {
         fields: [users.id],
         references: [usersToOrganizations.userId]
     }) */
-};
+}
 
 /*
 export const organizationsRelations = {
