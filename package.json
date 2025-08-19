@@ -1,0 +1,30 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "prisma": {
+    "schema": "./server/db/prisma/schema.prisma"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxt/eslint": "^1.9.0",
+    "eslint": "^9.33.0"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.0.2",
+    "@nuxt/ui-pro": "^3.3.2",
+    "@prisma/client": "6.14.0",
+    "nuxt": "^4.0.3",
+    "nuxt-auth-utils": "^0.5.23",
+    "nuxt-security": "^2.3.0",
+    "prisma": "6.14.0",
+    "zod": "^4.0.17"
+  }
+}
