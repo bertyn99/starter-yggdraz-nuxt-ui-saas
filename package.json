@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
+    "@nuxt/content": "^3.6.3",
+    "@nuxt/image": "^1.11.0",
     "@nuxt/ui-pro": "^3.3.2",
     "better-sqlite3": "^12.2.0",
     "drizzle-orm": "^0.44.4",

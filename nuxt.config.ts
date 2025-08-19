@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   css: ['~/assets/css/main.css'],
-  modules: ["@nuxt/ui-pro", "nuxt-auth-utils", "nuxt-security"],
+  modules: ["@nuxt/ui-pro", "nuxt-auth-utils", '@nuxt/image', "nuxt-security"],
   compatibilityDate: "2024-10-17",
 
   runtimeConfig: {
