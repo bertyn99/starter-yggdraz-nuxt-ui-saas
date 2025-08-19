@@ -127,12 +127,13 @@ export const usersRelations = {
         fields: [users.id],
         references: [sessions.userId]
     }),
-    organizations: relations('organizations', {
+    /* organizations: relations('organizations', {
         fields: [users.id],
         references: [usersToOrganizations.userId]
-    })
+    }) */
 };
 
+/*
 export const organizationsRelations = {
     users: relations('users', {
         fields: [organizations.id],
@@ -160,3 +161,4 @@ export type Role = typeof roles.$inferSelect;
 export type NewRole = typeof roles.$inferInsert;
 export type Permission = typeof permissions.$inferSelect;
 export type NewPermission = typeof permissions.$inferInsert;
+*/
