@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   css: ['~/assets/css/main.css'],
-  modules: ["@nuxt/ui-pro", "nuxt-auth-utils", '@nuxt/image', "nuxt-security"],
+  modules: ["@nuxt/ui-pro", '@nuxt/eslint', "nuxt-auth-utils", '@nuxt/image', '@nuxt/content', '@nuxtjs/seo', "nuxt-security"],
   compatibilityDate: "2024-10-17",
 
   runtimeConfig: {
@@ -26,9 +26,15 @@ export default defineNuxtConfig({
       sameSite: "strict",
     },
   },
-  security: {
-    csrf: true,
+  content: {
+    database: {
+      type: 'sqlite',
+      filename: 'SQLITE_DB_LOCATION'
+    }
   },
+  /*   security: {
+      csrf: true,
+    }, */
   eslint: {
     config: {
       stylistic: {

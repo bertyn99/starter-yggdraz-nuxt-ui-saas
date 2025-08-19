@@ -21,18 +21,35 @@
     "@nuxt/eslint": "^1.9.0",
     "@types/better-sqlite3": "^7.6.13",
     "drizzle-kit": "^0.31.4",
-    "eslint": "^9.33.0"
+    "eslint": "^9.33.0",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
     "@nuxt/content": "^3.6.3",
     "@nuxt/image": "^1.11.0",
     "@nuxt/ui-pro": "^3.3.2",
+    "@nuxtjs/seo": "^3.1.0",
     "better-sqlite3": "^12.2.0",
     "drizzle-orm": "^0.44.4",
     "nuxt": "^4.0.3",
     "nuxt-auth-utils": "^0.5.23",
     "nuxt-security": "^2.3.0",
     "zod": "^4.0.17"
-  }
+  },
+  "resolutions": {
+    "unimport": "4.1.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ],
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "sharp",
+      "vue-demi"
+    ]
+  },
+  "packageManager": "pnpm@10.13.1"
 }
