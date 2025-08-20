@@ -118,20 +118,24 @@ export const rolesToPermissions = sqliteTable('roles_to_permissions', {
 // RELATIONS
 // =================================================================
 
-export const usersRelations = {
-  accounts: relations('accounts', {
-    fields: [users.id],
-    references: [accounts.userId]
-  }),
-  sessions: relations('sessions', {
-    fields: [users.id],
-    references: [sessions.userId]
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions)
+}))
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id]
   })
-  /* organizations: relations('organizations', {
-        fields: [users.id],
-        references: [usersToOrganizations.userId]
-    }) */
-}
+}))
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id]
+  })
+}))
 
 /*
 export const organizationsRelations = {
@@ -144,17 +148,11 @@ export const organizationsRelations = {
         references: [roles.organizationId]
     })
 };
+*/
 
-// =================================================================
-// TYPE EXPORTS
-// =================================================================
 
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
-export type Account = typeof accounts.$inferSelect;
-export type NewAccount = typeof accounts.$inferInsert;
-export type Session = typeof sessions.$inferSelect;
-export type NewSession = typeof sessions.$inferInsert;
+
+/*
 export type Organization = typeof organizations.$inferSelect;
 export type NewOrganization = typeof organizations.$inferInsert;
 export type Role = typeof roles.$inferSelect;

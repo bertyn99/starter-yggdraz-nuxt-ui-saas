@@ -7,7 +7,7 @@ import Database from 'better-sqlite3'
 export { eq, and, or, desc, like }
 export const tables = schema
 
-export function useDrizzle() {
+export function useDB() {
   // if we deploy cloudflare and use D1 with nuxt hub
   // return drizzle(hubDatabase(), { schema: { ...schema, ...authSchema } });
 

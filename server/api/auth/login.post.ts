@@ -1,52 +1,94 @@
 import * as argon2 from '@node-rs/argon2'
+import { eq } from 'drizzle-orm'
+import { users, sessions, accounts } from '../../db/auth-schema'
+import { loginSchema, type LoginSchema } from '../../../shared/schema/auth'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<LoginResponse> => {
   try {
-    const body = await readBody(event) // Retrieve request body
-    if (!body) {
-      console.error('Request body is empty or undefined')
-      return createError({
+    const body = await readBody(event)
+
+    // Validate request body with Zod
+    const validationResult = loginSchema.safeParse(body)
+    if (!validationResult.success) {
+      throw createError({
         statusCode: 400,
-        statusMessage: 'Request body is empty or undefined'
+        message: `Validation failed: ${validationResult.error.issues[0]?.message || 'Invalid input'}`
       })
     }
 
-    const { email, password } = body
+    const { email, password }: LoginSchema = validationResult.data
+    const db = useDB()
 
-    if (!email || !password) {
-      console.error('Email or password missing')
-      return createError({
-        statusCode: 400,
-        statusMessage: 'Email and password are required'
-      })
-    }
-
-    const db = useDB() // Initialize database connection
+    // Find user by email
     const user = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.email, email)
+      where: eq(users.email, email)
     })
 
-    // For security reasons, do not specify if username or password is incorrect
-    if (!user || !(await argon2.verify(user.hashedPassword, password))) {
-      console.error(`Invalid email or password for user: ${email}`)
-      return createError({
+    if (!user) {
+      throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid email or password'
-      })
-    } else {
-      const userData = { username: user.username }
-      await setUserSession(event, {
-        user: userData,
-        loggedInAt: new Date()
+        message: 'Invalid credentials'
       })
     }
 
-    return { success: true, user }
-  } catch (error) {
-    console.error('Error handling login request:', error)
-    return createError({
+    // Find account by user id
+    const account = await db.query.accounts.findFirst({
+      where: eq(accounts.userId, user.id)
+    })
+
+    if (!account?.hashedPassword) {
+      throw createError({
+        statusCode: 401,
+        message: 'Invalid credentials'
+      })
+    }
+
+    // Compare password with hashed password in db
+    const isValid = await argon2.verify(account.hashedPassword, password)
+    if (!isValid) {
+      throw createError({
+        statusCode: 401,
+        message: 'Invalid credentials'
+      })
+    }
+
+    // Create session in DB
+    const sessionToken = crypto.randomUUID()
+    await db.insert(sessions).values({
+      userId: user.id,
+      token: sessionToken,
+      userAgent: event.headers.get('user-agent'),
+      ipAddress: event.headers.get('x-forwarded-for') || event.node.req.socket.remoteAddress,
+      expiresAt: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000) // 1 week
+    })
+
+    // Create session
+    await setUserSession(event, {
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        username: user.username
+      }
+    })
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName
+    }
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
+      throw error
+    }
+
+    console.error('Login error:', error)
+    throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to process request'
+      message: 'Internal server error'
     })
   }
 })
