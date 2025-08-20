@@ -54,6 +54,26 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - **VS Code support** - Optimized development environment
 - **Git integration** - Version control ready
 
+## 🔄 **Planned Features**
+
+### **🔐 Enhanced Authentication & Security**
+- **Social Authentication** - Google OAuth and GitHub OAuth integration
+- **Forgot Password Flow** - Secure password reset with email verification
+- **Email Verification** - Account verification on signup
+- **Password Change Notifications** - Email alerts when passwords are updated
+
+### **📧 Email Infrastructure**
+- **Email Service Layer** - Centralized email handling with service utilities
+- **Welcome Emails** - Automated onboarding emails for new users
+- **Transactional Emails** - Password reset, verification, and security notifications
+- **Email Templates** - Professional, branded email designs
+
+### **🔄 User Experience Improvements**
+- **Account Recovery** - Multiple recovery options and security measures
+- **Profile Management** - Enhanced user profile customization
+- **Session Management** - Better control over active sessions
+- **Security Dashboard** - User security settings and activity monitoring
+
 ## 📦 **Libraries & Dependencies**
 
 ### **Core Framework**
