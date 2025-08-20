@@ -1,5 +1,5 @@
 import * as argon2 from '@node-rs/argon2'
-import { users, accounts } from '../../db/auth-schema'
+import { users, accounts } from '../../db/schema/auth-schema'
 import { signupSchema, type SignupSchema } from '../../../shared/schema/auth'
 import type { SignupResponse } from '../../../shared/types/auth'
 

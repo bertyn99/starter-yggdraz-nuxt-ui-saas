@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import * as z from 'zod'
+import { loginSchema, type LoginSchema } from '#shared/schema/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
@@ -15,7 +15,7 @@ const toast = useToast()
 
 const fields = [{
   name: 'email',
-  type: 'text' as const,
+  type: 'email' as const,
   label: 'Email',
   placeholder: 'Enter your email',
   required: true
@@ -23,7 +23,8 @@ const fields = [{
   name: 'password',
   label: 'Password',
   type: 'password' as const,
-  placeholder: 'Enter your password'
+  placeholder: 'Enter your password',
+  required: true
 }, {
   name: 'remember',
   label: 'Remember me',
@@ -33,33 +34,36 @@ const fields = [{
 const providers = [{
   label: 'Google',
   icon: 'i-simple-icons-google',
+  provider: 'google',
   onClick: () => {
     toast.add({ title: 'Google', description: 'Login with Google' })
   }
 }, {
   label: 'GitHub',
   icon: 'i-simple-icons-github',
+  provider: 'github',
   onClick: () => {
     toast.add({ title: 'GitHub', description: 'Login with GitHub' })
   }
 }]
 
-const schema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
-})
-
-type Schema = z.output<typeof schema>
+type Schema = LoginSchema
 
 function onSubmit(payload: FormSubmitEvent<Schema>) {
   console.log('Submitted', payload)
+  
+  // Here you would typically call your login API
+  // const { data, error } = await $fetch('/api/auth/login', {
+  //   method: 'POST',
+  //   body: payload.data
+  // })
 }
 </script>
 
 <template>
   <UAuthForm
     :fields="fields"
-    :schema="schema"
+    :schema="loginSchema"
     :providers="providers"
     title="Welcome back"
     icon="i-lucide-lock"

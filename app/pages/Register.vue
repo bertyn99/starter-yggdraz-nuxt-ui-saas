@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import * as z from 'zod'
+import { signupSchema, type SignupSchema } from '~/shared/schema/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
@@ -14,53 +14,79 @@ useSeoMeta({
 const toast = useToast()
 
 const fields = [{
-  name: 'name',
+  name: 'username',
   type: 'text' as const,
-  label: 'Name',
-  placeholder: 'Enter your name'
+  label: 'Username',
+  placeholder: 'Enter your username',
+  required: true
 }, {
   name: 'email',
-  type: 'text' as const,
+  type: 'email' as const,
   label: 'Email',
-  placeholder: 'Enter your email'
+  placeholder: 'Enter your email',
+  required: true
+}, {
+  name: 'firstName',
+  type: 'text' as const,
+  label: 'First Name',
+  placeholder: 'Enter your first name'
+}, {
+  name: 'lastName',
+  type: 'text' as const,
+  label: 'Last Name',
+  placeholder: 'Enter your last name'
 }, {
   name: 'password',
   label: 'Password',
   type: 'password' as const,
-  placeholder: 'Enter your password'
+  placeholder: 'Enter your password',
+  required: true
+}, {
+  name: 'confirmPassword',
+  label: 'Confirm Password',
+  type: 'password' as const,
+  placeholder: 'Confirm your password',
+  required: true
+}, {
+  name: 'acceptTerms',
+  label: 'I agree to the Terms of Service',
+  type: 'checkbox' as const,
+  required: true
 }]
 
 const providers = [{
   label: 'Google',
   icon: 'i-simple-icons-google',
+  provider: 'google',
   onClick: () => {
-    toast.add({ title: 'Google', description: 'Login with Google' })
+    toast.add({ title: 'Google', description: 'Sign up with Google' })
   }
 }, {
   label: 'GitHub',
   icon: 'i-simple-icons-github',
+  provider: 'github',
   onClick: () => {
-    toast.add({ title: 'GitHub', description: 'Login with GitHub' })
+    toast.add({ title: 'GitHub', description: 'Sign up with GitHub' })
   }
 }]
 
-const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
-})
-
-type Schema = z.output<typeof schema>
+type Schema = SignupSchema
 
 function onSubmit(payload: FormSubmitEvent<Schema>) {
   console.log('Submitted', payload)
+  
+  // Here you would typically call your signup API
+  // const { data, error } = await $fetch('/api/auth/signup', {
+  //   method: 'POST',
+  //   body: payload.data
+  // })
 }
 </script>
 
 <template>
   <UAuthForm
     :fields="fields"
-    :schema="schema"
+    :schema="signupSchema"
     :providers="providers"
     title="Create an account"
     :submit="{ label: 'Create account' }"

@@ -1,22 +1,14 @@
 import * as argon2 from '@node-rs/argon2'
 import { eq } from 'drizzle-orm'
-import { users, sessions, accounts } from '../../db/auth-schema'
+import { users, sessions, accounts } from '../../db/schema/auth-schema'
 import { loginSchema, type LoginSchema } from '../../../shared/schema/auth'
 
-export default defineEventHandler(async (event): Promise<LoginResponse> => {
+export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody(event)
+    const body = await readValidatedBody(event, loginSchema.safeParse)
 
-    // Validate request body with Zod
-    const validationResult = loginSchema.safeParse(body)
-    if (!validationResult.success) {
-      throw createError({
-        statusCode: 400,
-        message: `Validation failed: ${validationResult.error.issues[0]?.message || 'Invalid input'}`
-      })
-    }
+    const { email, password } = body
 
-    const { email, password }: LoginSchema = validationResult.data
     const db = useDB()
 
     // Find user by email
@@ -81,14 +73,10 @@ export default defineEventHandler(async (event): Promise<LoginResponse> => {
       lastName: user.lastName
     }
   } catch (error: unknown) {
-    if (error && typeof error === 'object' && 'statusCode' in error) {
-      throw error
-    }
-
     console.error('Login error:', error)
     throw createError({
-      statusCode: 500,
-      message: 'Internal server error'
+      statusCode: error.statusCode || 500,
+      message: error.message || 'Internal server error'
     })
   }
 })
