@@ -1,0 +1,92 @@
+---
+description: Authorization with nuxt-authorization in nuxt app
+globs: 
+alwaysApply: false
+---
+
+# Authorization with nuxt-authorization
+
+- **Define all authorization logic using the nuxt-authorization module**
+  - Use `defineAbility` to declare permission rules for each resource/action (e.g., `editProduct`, `viewOrder`).
+  - Group abilities by resource for clarity and maintainability.
+  - Example:
+    ```typescript
+    // abilities/product.ts
+    export const editProduct = defineAbility((user, product) => user.role === 'admin' || user.id === product.ownerId)
+    ```
+
+- **Use bouncer functions (`authorize`, `allows`, `denies`) for all permission checks**
+  - On the server, use `authorize(event, ability, ...args)` to enforce access control and throw on denial.
+  - On the client, use `allows`/`denies` and the `Can` component to conditionally render UI (e.g., show/hide buttons).
+  - Example (server API):
+    ```typescript
+    // server/api/products/[id].get.ts
+    import { authorize } from 'nuxt-authorization'
+    import { viewProduct } from '~/abilities/product'
+    export default defineEventHandler(async (event) => {
+      const product = await getProduct(event)
+      await authorize(event, viewProduct, product)
+      return product
+    })
+    ```
+  - Example (client):
+    ```vue
+    <Can :ability="editProduct" :args="[product]">
+      <UButton>Edit</UButton>
+    </Can>
+    ```
+
+- **Integrate with nuxt-auth-utils for user/session state**
+  - Use `useUserSession()` composable to access the current user for ability checks.
+  - Ensure the user resolver is provided for both client and server (see `plugins/authorization-resolver.ts`).
+  - Example:
+    ```typescript
+    // plugins/authorization-resolver.ts
+    export default defineNuxtPlugin({
+      provide: {
+        authorization: {
+          resolveClientUser: () => useUserSession().user.value,
+        },
+      },
+    })
+    ```
+
+- **Protect sensitive routes and API endpoints**
+  - Always check permissions on the server for any sensitive data or actions.
+  - Use route middleware (e.g., `middleware/admin.ts`) to guard admin/staff pages, but never rely solely on client-side checks.
+  - Example:
+    ```typescript
+    // middleware/admin.ts
+    export default defineNuxtRouteMiddleware(() => {
+      const user = useUserSession().user.value
+      if (!user || user.role !== 'admin') {
+        return navigateTo('/login')
+      }
+    })
+    ```
+
+- **Customize error handling and responses**
+  - Use `deny({ statusCode, message })` in abilities to return custom errors (e.g., 404 for hidden resources).
+  - Example:
+    ```typescript
+    export const viewOrder = defineAbility((user, order) => {
+      if (order.status === 'archived') {
+        return deny({ statusCode: 404, message: 'Not Found' })
+      }
+      return true
+    })
+    ```
+
+- **Store the abilities in the `shared/utils/rbac.ts` file**
+  - Example:
+    ```typescript
+    // shared/utils/product.ts
+    export const editProduct = defineAbility((user, product) => user.role === 'admin' || user.id === product.ownerId)
+    ```
+
+- **Best Practices**
+  - Keep ability definitions DRY and reusable.
+  - Reference actual code and update rules as new patterns emerge.
+  - Always test both positive and negative access scenarios.
+  - Cross-reference with @nuxt-auth-utils.mdc and @data-fetching.mdc for session and API integration.
+

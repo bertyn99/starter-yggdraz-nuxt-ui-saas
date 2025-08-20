@@ -1,0 +1,87 @@
+---
+description: Data fetching rules for Nuxt 4.
+globs:
+alwaysApply: false
+---
+
+# Data Fetching
+
+## General Principles
+
+- Use useFetch for standard data fetching with CSR, caching, and reactive updates for external APIs.
+- Use $fetch for client-side requests in event handlers.
+- Use useAsyncData for complex data fetching (e.g., combining API calls).
+- Set server: false to ensure client-side fetching (aligned with CSR).
+- Set lazy: true to defer non-critical data fetching.
+- Integrate all data fetching operations with core systems (error handling, loading management, toast notifications, i18n) as defined in `02-core-systems.mdc`.
+
+## Basic External API Fetching
+
+```typescript
+// Example using useFetch with core systems integration
+const { t } = useI18n();
+const toast = useToast();
+const { handleError } = useErrorHandler();
+const { isLoading } = useLocalLoading('api-fetch');
+
+// Start loading state manually before fetch
+isLoading.value = true;
+
+const { data, error } = await useFetch('https://external-api.com/data', {
+  server: false, // Ensure client-side fetching for CSR
+  lazy: true, // Defer fetching until after initial render
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  },
+  onResponse({ request, response, options }) {
+    // Stop loading and show success toast
+    isLoading.value = false;
+    toast.add({
+      title: t('success'),
+      description: t('data.fetched_successfully'),
+      color: 'green'
+    });
+  },
+  onResponseError({ request, response, options }) {
+    // Handle error with the core error system
+    isLoading.value = false;
+    handleError(new Error(response._data.message || t('error.unknown')), 'critical');
+  },
+});
+```
+
+## Fetching in Event Handlers
+
+For event handlers where composables can't be used directly:
+
+```typescript
+const { t } = useI18n();
+const toast = useToast();
+const { handleError } = useErrorHandler();
+const { isLoading, withLoading } = useLocalLoading('submit-form');
+
+const handleSubmit = async () => {
+  try {
+    // Use withLoading to automatically manage loading state
+    const result = await withLoading(
+      $fetch('https://external-api.com/data', {
+        method: 'POST',
+        body: { name: form.value.name },
+      })
+    );
+    
+    toast.add({
+      title: t('success'),
+      description: t('form.submitted_successfully'),
+      color: 'green'
+    });
+    
+    return result;
+  } catch (error) {
+    handleError(error, 'critical');
+    return null;
+  }
+};
+```

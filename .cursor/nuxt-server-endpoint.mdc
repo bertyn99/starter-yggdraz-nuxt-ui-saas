@@ -1,0 +1,408 @@
+---
+description: Nuxt server endpoint rules with Drizzle ORM and RBAC.
+globs:
+alwaysApply: false
+---
+
+# Nitro Endpoints with Drizzle ORM and RBAC
+
+## Server API Structure
+
+- **Organize API endpoints in `server/api/` directory**
+  - Use RESTful naming: `server/api/products/[id].get.ts`, `server/api/orders.post.ts`
+  - Group related endpoints in subdirectories: `server/api/admin/`, `server/api/vendor/`
+  - Example structure:
+    ```
+    server/api/
+    ├── products/
+    │   ├── index.get.ts
+    │   ├── [id].get.ts
+    │   ├── [id].put.ts
+    │   └── [id].delete.ts
+    ├── orders/
+    │   ├── index.get.ts
+    │   └── [id].patch.ts
+    └── admin/
+        └── users/
+            └── [id].get.ts
+    ```
+
+## Database Integration with Drizzle ORM
+
+- **Import and use Drizzle ORM in all database operations**
+  - Import schema and database instance from `~/server/database`
+  - Use prepared statements and parameterized queries for security
+  - Example:
+    ```typescript
+    // server/api/products/[id].get.ts
+    import { db } from '~/server/database'
+    import { products } from '~/server/database/schema'
+    import { eq } from 'drizzle-orm'
+    
+    export default defineEventHandler(async (event) => {
+      const id = getRouterParam(event, 'id')
+      const product = await db.query.products.findFirst({
+        where: eq(products.id, id)
+      })
+      return product
+    })
+    ```
+
+- **Handle database errors gracefully**
+  - Wrap database operations in try-catch blocks
+  - Return appropriate HTTP status codes for different error types
+  - Example:
+    ```typescript
+    try {
+      const result = await db.insert(products).values(productData)
+      return result
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw createError({ statusCode: 409, message: 'Product already exists' })
+      }
+      throw createError({ statusCode: 500, message: 'Database error' })
+    }
+    ```
+
+## Authorization with nuxt-authorization
+
+- **Import and use RBAC abilities from `shared/utils/rbac.ts`**
+  - Use `authorize()` function to check permissions before any sensitive operation
+  - Import specific abilities: `import { viewProduct, editProduct } from '~/shared/utils/rbac'`
+  - Example:
+    ```typescript
+    // server/api/products/[id].put.ts
+    import { authorize } from 'nuxt-authorization'
+    import { editProduct } from '~/shared/utils/rbac'
+    
+    export default defineEventHandler(async (event) => {
+      const product = await getProduct(event)
+      await authorize(event, editProduct, product)
+      
+      const body = await readBody(event)
+      const updatedProduct = await db.update(products)
+        .set(body)
+        .where(eq(products.id, product.id))
+      
+      return updatedProduct
+    })
+    ```
+
+- **Use grouped abilities for cleaner imports**
+  - Import from grouped exports: `import { productAbilities } from '~/shared/utils/rbac'`
+  - Example:
+    ```typescript
+    import { productAbilities } from '~/shared/utils/rbac'
+    
+    // Use as: await authorize(event, productAbilities.edit, product)
+    ```
+
+## Data Validation with H3
+
+- **Use H3 validation utilities for all input data**
+  - Use `getValidatedQuery()` for query parameters
+  - Use `getValidatedRouterParams()` for route parameters
+  - Use `readValidatedBody()` for request body
+  - Example with Zod schema:
+    ```typescript
+    import { z } from 'zod'
+    import { getValidatedQuery, readValidatedBody, getValidatedRouterParams } from 'h3'
+    
+    // Define validation schemas
+    const productSchema = z.object({
+      name: z.string().min(1).max(100),
+      price: z.number().positive(),
+      description: z.string().optional(),
+      categoryId: z.string().uuid()
+    })
+    
+    const querySchema = z.object({
+      page: z.number({ coerce: true }).positive().default(1),
+      limit: z.number({ coerce: true }).positive().max(100).default(20),
+      category: z.string().optional()
+    })
+    
+    // Validate query parameters
+    export default defineEventHandler(async (event) => {
+      const query = await getValidatedQuery(event, querySchema.parse)
+      // query is now typed and validated
+      return await getProducts(query)
+    })
+    
+    // Validate request body
+    export default defineEventHandler(async (event) => {
+      const body = await readValidatedBody(event, productSchema.parse)
+      // body is now typed and validated
+      return await createProduct(body)
+    })
+    
+    // Validate route parameters
+    export default defineEventHandler(async (event) => {
+      const params = await getValidatedRouterParams(event, z.object({
+        id: z.string().uuid()
+      }).parse)
+      // params.id is now typed and validated
+      return await getProduct(params.id)
+    })
+    ```
+
+- **Handle validation errors gracefully**
+  - Use `safeParse()` instead of `parse()` for non-throwing validation
+  - Provide meaningful error messages for validation failures
+  - Example:
+    ```typescript
+    export default defineEventHandler(async (event) => {
+      const result = await getValidatedQuery(event, querySchema.safeParse)
+      
+      if (!result.success) {
+        throw createError({
+          statusCode: 400,
+          message: 'Invalid query parameters',
+          data: result.error.errors
+        })
+      }
+      
+      // result.data is now typed and validated
+      return await getProducts(result.data)
+    })
+    ```
+
+- **Create reusable validation schemas**
+  - Define schemas in `server/validation/` directory
+  - Export and reuse schemas across endpoints
+  - Example:
+    ```typescript
+    // server/validation/product.ts
+    import { z } from 'zod'
+    
+    export const createProductSchema = z.object({
+      name: z.string().min(1).max(100),
+      price: z.number().positive(),
+      description: z.string().optional(),
+      categoryId: z.string().uuid()
+    })
+    
+    export const updateProductSchema = createProductSchema.partial()
+    
+    export const productQuerySchema = z.object({
+      page: z.number({ coerce: true }).positive().default(1),
+      limit: z.number({ coerce: true }).positive().max(100).default(20),
+      category: z.string().optional(),
+      search: z.string().optional()
+    })
+    ```
+
+## Request/Response Handling
+
+- **Validate input data using H3 utilities**
+  - Use `getQuery()`, `readBody()`, `getRouterParam()` for extracting request data
+  - Always validate data before processing
+  - Example:
+    ```typescript
+    export default defineEventHandler(async (event) => {
+      const body = await readValidatedBody(event, productSchema.parse)
+      
+      // Process validated data
+      const product = await createProduct(body)
+      return product
+    })
+    ```
+
+- **Return consistent response formats**
+  - Use standard HTTP status codes: 200, 201, 400, 401, 403, 404, 500
+  - Return structured responses for complex data
+  - Example:
+    ```typescript
+    return {
+      success: true,
+      data: product,
+      message: 'Product updated successfully'
+    }
+    ```
+
+## Error Handling
+
+- **Use H3's `createError()` for all error responses**
+  - Include appropriate status codes and messages
+  - Handle authorization denials gracefully
+  - Include validation error details when appropriate
+  - Example:
+    ```typescript
+    try {
+      await authorize(event, editProduct, product)
+    } catch (error) {
+      if (error.statusCode === 403) {
+        throw createError({ 
+          statusCode: 403, 
+          message: 'You do not have permission to edit this product' 
+        })
+      }
+      throw error
+    }
+    ```
+
+- **Handle validation errors specifically**
+  - Return detailed validation error information
+  - Use consistent error format for client-side handling
+  - Example:
+    ```typescript
+    try {
+      const body = await readValidatedBody(event, productSchema.parse)
+    } catch (error) {
+      if (error.statusCode === 400) {
+        throw createError({
+          statusCode: 400,
+          message: 'Validation failed',
+          data: {
+            errors: error.data?.errors || [],
+            fields: error.data?.fields || {}
+          }
+        })
+      }
+      throw error
+    }
+    ```
+
+## Middleware and Utilities
+
+- **Create reusable database query functions**
+  - Extract common database operations to utility functions
+  - Example:
+    ```typescript
+    // server/utils/products.ts
+    export async function getProductById(id: string) {
+      return await db.query.products.findFirst({
+        where: eq(products.id, id)
+      })
+    }
+    ```
+
+- **Use H3 middleware for common operations**
+  - Create middleware for authentication, logging, rate limiting
+  - Example:
+    ```typescript
+    // server/middleware/auth.ts
+    export default defineEventHandler(async (event) => {
+      const user = await getUserSession(event)
+      if (!user) {
+        throw createError({ statusCode: 401, message: 'Unauthorized' })
+      }
+    })
+    ```
+
+## Best Practices
+
+- **Always validate input data before processing**
+  - Never trust user input
+  - Use validation schemas for all endpoints
+  - Provide clear error messages for validation failures
+
+- **Always check authorization before database operations**
+  - Never skip permission checks, even for "simple" operations
+  - Use the most restrictive permission that applies
+
+- **Use TypeScript for all endpoints**
+  - Define proper types for request/response data
+  - Use Zod schemas for runtime validation
+  - Leverage TypeScript inference from validation schemas
+
+- **Implement proper logging**
+  - Log authorization failures for security monitoring
+  - Log database errors for debugging
+  - Log validation errors for user experience improvement
+
+- **Follow REST conventions**
+  - GET for reading, POST for creating, PUT/PATCH for updating, DELETE for removing
+  - Use appropriate HTTP status codes
+  - Return consistent response structures
+
+- **Handle edge cases**
+  - Check for null/undefined values before database operations
+  - Handle database connection errors
+  - Validate user input thoroughly
+  - Handle partial validation failures gracefully
+
+## Example Complete Endpoint with Validation
+
+```typescript
+// server/api/products/[id].put.ts
+import { authorize } from 'nuxt-authorization'
+import { editProduct } from '~/shared/utils/rbac'
+import { db } from '~/server/database'
+import { products } from '~/server/database/schema'
+import { eq } from 'drizzle-orm'
+import { getValidatedRouterParams, readValidatedBody } from 'h3'
+import { z } from 'zod'
+
+// Validation schema
+const updateProductSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  price: z.number().positive().optional(),
+  description: z.string().optional(),
+  categoryId: z.string().uuid().optional()
+})
+
+export default defineEventHandler(async (event) => {
+  try {
+    // Validate route parameters
+    const params = await getValidatedRouterParams(event, z.object({
+      id: z.string().uuid()
+    }).parse)
+
+    // Get existing product
+    const existingProduct = await db.query.products.findFirst({
+      where: eq(products.id, params.id)
+    })
+    
+    if (!existingProduct) {
+      throw createError({ statusCode: 404, message: 'Product not found' })
+    }
+
+    // Check authorization
+    await authorize(event, editProduct, existingProduct)
+
+    // Validate and get request body
+    const body = await readValidatedBody(event, updateProductSchema.parse)
+
+    // Update product
+    const updatedProduct = await db.update(products)
+      .set({
+        ...body,
+        updatedAt: new Date()
+      })
+      .where(eq(products.id, params.id))
+      .returning()
+
+    return {
+      success: true,
+      data: updatedProduct[0],
+      message: 'Product updated successfully'
+    }
+
+  } catch (error) {
+    if (error.statusCode) {
+      throw error
+    }
+    
+    // Handle validation errors
+    if (error.name === 'ZodError') {
+      throw createError({
+        statusCode: 400,
+        message: 'Validation failed',
+        data: {
+          errors: error.errors,
+          fields: error.errors.reduce((acc, err) => {
+            acc[err.path.join('.')] = err.message
+            return acc
+          }, {})
+        }
+      })
+    }
+    
+    throw createError({ 
+      statusCode: 500, 
+      message: 'Internal server error' 
+    })
+  }
+})
+``` 
