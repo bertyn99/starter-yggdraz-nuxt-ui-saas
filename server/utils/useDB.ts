@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1'
 import { eq, and, or, desc, like } from 'drizzle-orm'
-import * as schema from '../db/schema/schema'
-import * as authSchema from '../db/schema/auth-schema'
+import * as schema from '../db/schemas/schema'
+import * as authSchema from '../db/schemas/auth-schema'
 import Database from 'better-sqlite3'
 
 export { eq, and, or, desc, like }
@@ -12,6 +12,6 @@ export function useDB() {
   // return drizzle(hubDatabase(), { schema: { ...schema, ...authSchema } });
 
   // with basic sqlite
-  const sqlite = new Database('data.db')
-  return drizzle(sqlite, { schema: { ...schema, ...authSchema } })
+  const sqlite = new Database('./server/db/data.db')
+  return drizzle(sqlite, { schema: { ...authSchema, ...schema } })
 }

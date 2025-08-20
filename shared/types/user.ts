@@ -2,7 +2,7 @@
 // TYPE EXPORTS
 // =================================================================
 
-import type { accounts, sessions, users } from '~~/server/db/schema/auth-schema'
+import type { accounts, sessions, users } from '~~/server/db/schemas/auth-schema'
 
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert

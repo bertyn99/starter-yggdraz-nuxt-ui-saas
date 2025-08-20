@@ -21,7 +21,7 @@ shared/
 
 ```typescript
 // Import specific schemas
-import { loginSchema, signupSchema } from '~/shared/schema/auth'
+import { loginSchema, signupSchema } from '~/shared/schemas/auth'
 
 // Import all schemas
 import * as schemas from '~/shared/schema'
