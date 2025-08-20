@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loginSchema, type LoginSchema } from '#shared/schema/auth'
+import { loginSchema, type LoginSchema } from '#shared/schemas/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
@@ -12,6 +12,7 @@ useSeoMeta({
 })
 
 const toast = useToast()
+const { login, error } = useAuth()
 
 const fields = [{
   name: 'email',
@@ -51,12 +52,7 @@ type Schema = LoginSchema
 
 function onSubmit(payload: FormSubmitEvent<Schema>) {
   console.log('Submitted', payload)
-  
-  // Here you would typically call your login API
-  // const { data, error } = await $fetch('/api/auth/login', {
-  //   method: 'POST',
-  //   body: payload.data
-  // })
+  login(payload.data)
 }
 </script>
 
@@ -71,14 +67,14 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
   >
     <template #description>
       Don't have an account? <ULink
-        to="/signup"
+        to="/register"
         class="text-primary font-medium"
       >Sign up</ULink>.
     </template>
 
     <template #password-hint>
       <ULink
-        to="/"
+        to="/forgot-password"
         class="text-primary font-medium"
         tabindex="-1"
       >Forgot password?</ULink>
@@ -89,6 +85,15 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
         to="/"
         class="text-primary font-medium"
       >Terms of Service</ULink>.
+    </template>
+    <template #validation>
+      <UAlert
+        v-if="error"
+        variant="subtle"
+        color="error"
+        icon="i-lucide-info"
+        :title="error.message"
+      />
     </template>
   </UAuthForm>
 </template>
