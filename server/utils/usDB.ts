@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1'
 import { eq, and, or, desc, like } from 'drizzle-orm'
-import * as schema from '../db/schema'
-import * as authSchema from '../db/auth-schema'
+import * as schema from '../db/schema/schema'
+import * as authSchema from '../db/schema/auth-schema'
 import Database from 'better-sqlite3'
 
 export { eq, and, or, desc, like }

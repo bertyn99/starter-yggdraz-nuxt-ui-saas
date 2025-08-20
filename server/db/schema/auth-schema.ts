@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core'
 import { sql, relations } from 'drizzle-orm'
 import crypto from 'node:crypto'
 
@@ -37,7 +37,9 @@ export const accounts = sqliteTable('accounts', {
   hashedPassword: text('hashed_password'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
-})
+}, table => ([
+  index('accounts_user_id_idx').on(table.userId)
+]))
 
 // The `sessions` table stores user sessions for authentication.
 export const sessions = sqliteTable('sessions', {
@@ -49,7 +51,9 @@ export const sessions = sqliteTable('sessions', {
   expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`)
-})
+}, table => ([
+  index('sessions_user_id_idx').on(table.userId)
+]))
 
 // =================================================================
 // ORGANIZATION SCHEMA
@@ -149,8 +153,6 @@ export const organizationsRelations = {
     })
 };
 */
-
-
 
 /*
 export type Organization = typeof organizations.$inferSelect;
