@@ -50,9 +50,14 @@ const providers = [{
 
 type Schema = LoginSchema
 
-function onSubmit(payload: FormSubmitEvent<Schema>) {
+async function onSubmit(payload: FormSubmitEvent<Schema>) {
   console.log('Submitted', payload)
-  login(payload.data)
+  const res = await login(payload.data)
+
+  if (res) {
+    // redirect where you want
+    navigateTo('/')
+  }
 }
 </script>
 

@@ -1,29 +1,13 @@
 import * as argon2 from '@node-rs/argon2'
-import { users, accounts } from '../../db/schema/auth-schema'
-import { signupSchema, type SignupSchema } from '../../../shared/schema/auth'
-import type { SignupResponse } from '../../../shared/types/auth'
+import { users, accounts } from '../../db/schemas/auth-schema'
+import { signupSchema, type SignupSchema } from '../../../shared/schemas/auth'
 
-export default defineEventHandler(async (event): Promise<SignupResponse> => {
+export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody(event)
+    const body = await readValidatedBody(event, signupSchema.safeParse)
 
-    if (!body) {
-      throw createError({
-        statusCode: 400,
-        message: 'Request body is empty or undefined'
-      })
-    }
+    const { email, username, password, firstName, lastName } = body
 
-    // Validate request body with Zod
-    const validationResult = signupSchema.safeParse(body)
-    if (!validationResult.success) {
-      throw createError({
-        statusCode: 400,
-        message: `Validation failed: ${validationResult.error.issues[0]?.message || 'Invalid input'}`
-      })
-    }
-
-    const { email, username, password, firstName, lastName }: SignupSchema = validationResult.data
     const db = useDB()
     const hashedPassword = await argon2.hash(password)
 

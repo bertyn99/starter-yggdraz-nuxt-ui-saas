@@ -1,7 +1,7 @@
 import * as argon2 from '@node-rs/argon2'
 import { eq } from 'drizzle-orm'
-import { users, sessions, accounts } from '../../db/schema/auth-schema'
-import { loginSchema, type LoginSchema } from '../../../shared/schema/auth'
+import { users, sessions, accounts } from '../../db/schemas/auth-schema'
+import { loginSchema } from '../../../shared/schemas/auth'
 
 export default defineEventHandler(async (event) => {
   try {

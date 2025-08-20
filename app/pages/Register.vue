@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { signupSchema, type SignupSchema } from '~/shared/schemas/auth'
+import { signupSchema, type SignupSchema } from '#shared/schemas/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
@@ -12,6 +12,7 @@ useSeoMeta({
 })
 
 const toast = useToast()
+const { register, error } = useAuth()
 
 const fields = [{
   name: 'username',
@@ -72,14 +73,15 @@ const providers = [{
 
 type Schema = SignupSchema
 
-function onSubmit(payload: FormSubmitEvent<Schema>) {
+async function onSubmit(payload: FormSubmitEvent<Schema>) {
   console.log('Submitted', payload)
-  
-  // Here you would typically call your signup API
-  // const { data, error } = await $fetch('/api/auth/signup', {
-  //   method: 'POST',
-  //   body: payload.data
-  // })
+
+  const res = await register(payload.data)
+
+  if (res) {
+    // redirect where you want
+    navigateTo('/')
+  }
 }
 </script>
 
@@ -98,12 +100,22 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
         class="text-primary font-medium"
       >Login</ULink>.
     </template>
-
+    <template #validation>
+      <UAlert
+        v-if="error"
+        variant="subtle"
+        color="error"
+        icon="i-lucide-info"
+        :title="error"
+      />
+    </template>
     <template #footer>
       By signing up, you agree to our <ULink
         to="/"
         class="text-primary font-medium"
       >Terms of Service</ULink>.
     </template>
+
+
   </UAuthForm>
 </template>
