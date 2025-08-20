@@ -1,82 +1,341 @@
-# Nuxt UI Minimal Starter
+# 🚀 Nuxt UI SaaS Starter Template
 
-Look at [Nuxt docs](https://nuxt.com/docs/getting-started/introduction) and [Nuxt UI docs](https://ui.nuxt.com) to learn more.
+A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **Nuxt UI Pro**, and modern web technologies. This template provides everything you need to build and deploy a professional SaaS application.
 
-## Setup
+![Nuxt](https://img.shields.io/badge/Nuxt-4.0.3-00DC82?style=for-the-badge&logo=nuxt.js)
+![Vue](https://img.shields.io/badge/Vue-3.4+-4FC08D?style=for-the-badge&logo=vue.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-3178C6?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC?style=for-the-badge&logo=tailwind-css)
 
-Make sure to install the dependencies:
+## ✨ Features
+
+### 🎨 **UI & Design System**
+- **Nuxt UI Pro** - Professional component library with 100+ components
+- **Tailwind CSS** - Utility-first CSS framework
+- **Custom color scheme** - Lime primary with neutral gray
+- **Responsive design** - Mobile-first approach
+- **Dark/Light mode support** - Built-in theme switching
+- **Iconify integration** - 100,000+ icons from Lucide and Simple Icons
+
+### 🔐 **Authentication & Security**
+- **nuxt-auth-utils** - Modern authentication system
+- **Multi-provider support** - Credentials, Google, Facebook, Apple, Twitter, GitHub
+- **Session management** - Secure token-based sessions
+- **Role-based access control** - User, Admin, Staff roles
+- **Security headers** - CSRF protection, secure cookies
+- **Password hashing** - Argon2 for secure password storage
+
+### 🗄️ **Database & ORM**
+- **Drizzle ORM** - Type-safe database toolkit
+- **SQLite support** - Built-in with better-sqlite3
+- **PostgreSQL ready** - Easy migration path
+- **Database migrations** - Version-controlled schema changes
+- **Type-safe queries** - Full TypeScript support
+- **Database studio** - Visual database management
+
+### 📝 **Content Management**
+- **Nuxt Content** - File-based CMS with Markdown support
+- **Structured content** - YAML-based content schemas
+- **SEO optimization** - Meta tags, Open Graph, structured data
+- **Blog system** - Complete blogging platform
+- **Dynamic routing** - Auto-generated pages from content
+
+### 🚀 **Performance & SEO**
+- **Nuxt Image** - Optimized image handling
+- **Static generation** - Pre-rendered pages for speed
+- **SEO module** - Advanced search engine optimization
+- **Meta management** - Dynamic meta tags
+- **Performance monitoring** - Built-in devtools
+
+### 🛠️ **Development Experience**
+- **TypeScript** - Full type safety
+- **ESLint** - Code quality and consistency
+- **Hot reload** - Instant development feedback
+- **VS Code support** - Optimized development environment
+- **Git integration** - Version control ready
+
+## 📦 **Libraries & Dependencies**
+
+### **Core Framework**
+- **Nuxt 4** - Full-stack Vue.js framework
+- **Vue 3** - Progressive JavaScript framework
+- **TypeScript** - Typed JavaScript
+
+### **UI Components**
+- **@nuxt/ui-pro** - Professional UI component library
+- **@iconify-json/lucide** - Beautiful icon set
+- **@iconify-json/simple-icons** - Brand and technology icons
+
+### **Authentication & Security**
+- **nuxt-auth-utils** - Modern authentication utilities
+- **@node-rs/argon2** - Fast password hashing
+- **nuxt-security** - Security headers and protection
+- **zod** - Schema validation
+
+### **Database & ORM**
+- **drizzle-orm** - Type-safe database toolkit
+- **drizzle-kit** - Database migration tools
+- **better-sqlite3** - High-performance SQLite
+
+### **Content & SEO**
+- **@nuxt/content** - File-based CMS
+- **@nuxt/image** - Image optimization
+- **@nuxtjs/seo** - SEO management
+
+### **Development Tools**
+- **@nuxt/eslint** - ESLint integration
+- **@nuxt/devtools** - Development utilities
+
+## 🚀 **Quick Start**
+
+### **Prerequisites**
+- Node.js 18+ 
+- pnpm (recommended), npm, yarn, or bun
+
+### **Installation**
 
 ```bash
-# npm
-npm install
+# Clone the repository
+git clone <your-repo-url>
+cd starter-yggdraz-nuxt-ui-saas
 
-# pnpm
+# Install dependencies
 pnpm install
 
-# yarn
-yarn install
-
-# bun
-bun install
+# Start development server
+pnpm dev
 ```
 
-## Development Server
+Your application will be available at `http://localhost:3000`
 
-Start the development server on `http://localhost:3000`:
+## 🗄️ **Database Setup**
+
+This template supports multiple database configurations. Choose the one that fits your needs:
+
+### **Option 1: SQLite (Default - Development)**
+
+The template comes pre-configured with SQLite for development:
 
 ```bash
-# npm
-npm run dev
+# Generate database schema
+pnpm db:generate
 
-# pnpm
-pnpm run dev
+# Run migrations
+pnpm db:migrate
 
-# yarn
-yarn dev
-
-# bun
-bun run dev
+# Open database studio (optional)
+pnpm db:studio
 ```
 
-## Production
+**Configuration**: `drizzle.config.ts` is already set up for SQLite.
 
-Build the application for production:
+### **Option 2: PostgreSQL (Production)**
+
+For production use, switch to PostgreSQL:
+
+1. **Install PostgreSQL dependencies:**
+```bash
+pnpm add postgres @types/pg
+pnpm remove better-sqlite3 @types/better-sqlite3
+```
+
+2. **Update `drizzle.config.ts`:**
+```typescript
+import { defineConfig } from 'drizzle-kit'
+
+export default defineConfig({
+  schema: ['./server/db/schemas/*.ts'],
+  out: './server/db/migrations',
+  dialect: 'postgresql',
+  dbCredentials: {
+    url: process.env.DATABASE_URL || ''
+  }
+})
+```
+
+3. **Update `nuxt.config.ts`:**
+```typescript
+export default defineNuxtConfig({
+  // ... other config
+  content: {
+    database: {
+
+  }
+})
+```
+
+4. **Set environment variables:**
+```bash
+# .env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_NAME=nuxt_saas
+```
+
+### **Option 3: NuxtHub Integration**
+
+To integrate with NuxtHub for managed database services:
+
+1. **Install NuxtHub:**
+```bash
+pnpm add @nuxthub/core
+```
+
+2. **Update `nuxt.config.ts`:**
+```typescript
+export default defineNuxtConfig({
+  modules: [
+    // ... other modules
+    '@nuxthub/core'
+  ],
+  hub: {
+    database: {
+      type: 'postgresql',
+      // NuxtHub will handle credentials automatically
+    }
+  }
+})
+```
+
+3. **Configure NuxtHub in your project settings**
+
+## 🔧 **Customization**
+
+### **Theme & Colors**
+
+Update `app.config.ts` to customize your theme:
+
+```typescript
+export default defineAppConfig({
+  ui: {
+    primary: 'blue', // Change primary color
+    gray: 'slate',   // Change gray scale
+   
+  }
+})
+```
+
+### **Content Structure**
+
+Modify `content.config.ts` to customize your content schemas:
+
+```typescript
+// Add new content types
+export const collections = {
+  // ... existing collections
+  products: defineCollection({
+    source: '5.products/**/*',
+    type: 'page',
+    schema: z.object({
+      name: z.string(),
+      price: z.number(),
+      description: z.string()
+    })
+  })
+}
+```
+
+### **Authentication Providers**
+
+Add new OAuth providers in `server/api/auth/provider/`:
+
+```typescript
+// server/api/auth/provider/github.get.ts
+export default defineEventHandler(async (event) => {
+  // Implement GitHub OAuth
+})
+```
+
+## 📁 **Project Structure**
+
+```
+├── app/                    # Application code
+│   ├── components/        # Vue components
+│   ├── layouts/           # Layout components
+│   ├── pages/             # Route pages
+│   ├── middleware/        # Route middleware
+│   └── composables/       # Composable functions
+├── content/               # Content files (Markdown, YAML)
+├── server/                # Server-side code
+│   ├── api/              # API endpoints
+│   ├── db/               # Database schemas & migrations
+│   └── utils/            # Server utilities
+├── shared/                # Shared types & utilities
+├── public/                # Static assets
+└── .nuxt/                 # Build output
+```
+
+## 🚀 **Deployment**
+
+### **Build for Production**
 
 ```bash
-# npm
-npm run build
+# Build the application
+pnpm build
 
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+# Preview production build
+pnpm preview
 ```
 
-Locally preview production build:
+### **Environment Variables**
+
+Set these environment variables for production:
 
 ```bash
-# npm
-npm run preview
+# Database
+DB_HOST=your_db_host
+DB_PORT=5432
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
 
-# pnpm
-pnpm run preview
+# Authentication
+AUTH_SECRET=your_auth_secret
+AUTH_ORIGIN=https://yourdomain.com
 
-# yarn
-yarn preview
-
-# bun
-bun run preview
+# OAuth (if using)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 📚 **Available Scripts**
 
+```bash
+# Development
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm preview      # Preview production build
 
-## Prisma Setup
+# Database
+pnpm db:generate  # Generate database schema
+pnpm db:migrate   # Run database migrations
+pnpm db:studio    # Open database studio
 
-Prisma is a next-generation ORM that simplifies database management. This setup guide covers the steps for working with SQLite and PostgreSQL. Choose the database that best fits your project requirements.
+# Code Quality
+pnpm lint         # Run ESLint
+pnpm lint:fix     # Fix ESLint issues
+```
 
-### Install Prisma
+## 🤝 **Contributing**
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 **License**
+
+This project is licensed under the MIT License.
+
+## 🆘 **Support**
+
+- **Documentation**: [Nuxt Docs](https://nuxt.com/docs)
+- **UI Components**: [Nuxt UI](https://ui.nuxt.com)
+- **Issues**: Create an issue in the repository
+
+---
+
+**Built with ❤️ using Nuxt 4 and modern web technologies**
