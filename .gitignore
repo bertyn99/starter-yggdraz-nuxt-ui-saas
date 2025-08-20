@@ -6,6 +6,10 @@
 .cache
 dist
 
+# Drizzle
+server/db/migrations
+server/db/data.db
+
 # Node dependencies
 node_modules
 
