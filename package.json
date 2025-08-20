@@ -19,6 +19,8 @@
     "out": "./server/db/migrations"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.63",
+    "@iconify-json/simple-icons": "^1.2.48",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint": "^1.9.0",
     "@types/better-sqlite3": "^7.6.13",
