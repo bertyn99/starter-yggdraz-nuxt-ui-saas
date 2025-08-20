@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   content: {
     database: {
       type: 'sqlite',
-      filename: 'SQLITE_DB_LOCATION'
+      filename: './server/db/data.db'
     }
   },
 
