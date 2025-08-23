@@ -1,0 +1,86 @@
+title: Contact Us
+description: Get in touch with our team. We're here to help with any questions, support requests, or partnership opportunities.
+seo:
+  title: Contact Us - Get in Touch
+  description: Contact our team for support, sales inquiries, partnerships, or general questions. We're here to help you succeed.
+navigation: false
+hero:
+  title: Let's Talk
+  description: Have a question or need help? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+  links:
+    - label: Schedule a Demo
+      icon: i-lucide-calendar
+      to: mailto:sales@company.com?subject=Demo%20Request
+      variant: solid
+      size: lg
+contact_info:
+  title: Get in Touch
+  description: Choose the best way to reach us
+  methods:
+    - title: General Inquiries
+      description: For general questions and information
+      icon: i-lucide-mail
+      contact: hello@company.com
+      response_time: "Within 24 hours"
+    - title: Technical Support
+      description: For technical issues and help
+      icon: i-lucide-life-buoy
+      contact: support@company.com
+      response_time: "Within 4 hours"
+    - title: Sales & Partnerships
+      description: For sales inquiries and partnerships
+      icon: i-lucide-handshake
+      contact: sales@company.com
+      response_time: "Within 2 hours"
+    - title: Enterprise Support
+      description: For enterprise customers
+      icon: i-lucide-building-2
+      contact: enterprise@company.com
+      response_time: "Within 1 hour"
+office_locations:
+  title: Our Offices
+  description: Visit us in person
+  locations:
+    - city: San Francisco
+      country: United States
+      address: "123 Innovation Drive, San Francisco, CA 94105"
+      phone: "+1 (415) 555-0123"
+      hours: "Monday - Friday, 9:00 AM - 6:00 PM PST"
+    - city: London
+      country: United Kingdom
+      address: "456 Tech Street, London, EC2A 4BX"
+      phone: "+44 20 7946 0958"
+      hours: "Monday - Friday, 9:00 AM - 6:00 PM GMT"
+    - city: Tokyo
+      country: Japan
+      address: "789 Digital Avenue, Tokyo, 100-0001"
+      phone: "+81 3-1234-5678"
+      hours: "Monday - Friday, 9:00 AM - 6:00 PM JST"
+social_media:
+  title: Follow Us
+  description: Stay connected and get the latest updates
+  platforms:
+    - name: Twitter
+      handle: "@company"
+      url: "https://twitter.com/company"
+      icon: i-simple-icons-twitter
+    - name: LinkedIn
+      handle: "company"
+      url: "https://linkedin.com/company/company"
+      icon: i-simple-icons-linkedin
+    - name: GitHub
+      handle: "company"
+      url: "https://github.com/company"
+      icon: i-simple-icons-github
+    - name: YouTube
+      handle: "Company Channel"
+      url: "https://youtube.com/@company"
+      icon: i-simple-icons-youtube
+faq_preview:
+  title: Quick Answers
+  description: Check our FAQ for common questions
+  link:
+    label: View FAQ
+    to: "/faq"
+    icon: i-lucide-arrow-right
+    trailing: true

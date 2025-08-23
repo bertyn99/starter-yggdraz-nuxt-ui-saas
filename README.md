@@ -48,7 +48,6 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - [ ] **Contact** - Contact page for the project
 - [ ] **Privacy Policy** - Privacy policy for the project
 - [ ] **Terms of Service** - Terms of service for the project
-- [ ] **Cookie Policy** - Cookie policy for the project
 
 ### 🚀 **Performance & SEO**
 - [x] **Nuxt Image** - Optimized image handling

@@ -1,0 +1,274 @@
+title: Terms of Service
+description: Read our terms and conditions that govern your use of our platform and services.
+seo:
+  title: Terms of Service - Platform Terms & Conditions
+  description: Our terms of service outline the rules, rights, and responsibilities for using our platform and services.
+navigation: false
+last_updated: "2024-01-15"
+effective_date: "2024-01-15"
+sections:
+  - title: Agreement to Terms
+    content: |
+      By accessing and using our platform and services, you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of these terms, you may not access our services.
+      
+      These Terms apply to all users, visitors, and others who access or use our platform. We reserve the right to modify these Terms at any time, and such modifications will be effective immediately upon posting.
+  
+  - title: Description of Service
+    content: |
+      We provide a cloud-based platform that enables users to build, deploy, and manage applications and digital services. Our platform includes:
+      
+      **Core Features:**
+      - Application development and deployment tools
+      - Database and storage services
+      - API management and integration
+      - Analytics and monitoring capabilities
+      - Team collaboration features
+      
+      **Additional Services:**
+      - Professional support and consulting
+      - Training and documentation
+      - Custom development services
+      - Enterprise integrations
+      - White-label solutions
+  
+  - title: User Accounts and Registration
+    content: |
+      To access certain features of our platform, you must create an account:
+      
+      **Account Creation:**
+      - You must be at least 18 years old or have parental consent
+      - Provide accurate and complete information
+      - Maintain the security of your account credentials
+      - Notify us immediately of any unauthorized use
+      
+      **Account Responsibilities:**
+      - You are responsible for all activities under your account
+      - Maintain appropriate security measures
+      - Comply with all applicable laws and regulations
+      - Not share account access with unauthorized users
+      
+      **Account Termination:**
+      - We may terminate accounts for Terms violations
+      - You may cancel your account at any time
+      - Data retention policies apply after termination
+  
+  - title: Acceptable Use Policy
+    content: |
+      You agree to use our platform only for lawful purposes and in accordance with these Terms:
+      
+      **Prohibited Activities:**
+      - Violating any applicable laws or regulations
+      - Infringing on intellectual property rights
+      - Transmitting harmful or malicious code
+      - Attempting to gain unauthorized access
+      - Interfering with service operation
+      
+      **Content Restrictions:**
+      - No illegal, harmful, or offensive content
+      - No spam or unsolicited communications
+      - No content that violates third-party rights
+      - No content that promotes illegal activities
+      - No content that could harm minors
+      
+      **Service Abuse:**
+      - No excessive resource consumption
+      - No automated scraping without permission
+      - No attempts to circumvent usage limits
+      - No interference with other users
+  
+  - title: Intellectual Property Rights
+    content: |
+      Our platform and services contain intellectual property owned by us and our licensors:
+      
+      **Our Rights:**
+      - Platform software and code
+      - User interface and design elements
+      - Trademarks and service marks
+      - Documentation and content
+      - Proprietary algorithms and methods
+      
+      **Your Rights:**
+      - Content you create and upload
+      - Applications you build on our platform
+      - Custom configurations and integrations
+      - Data and information you provide
+      
+      **License Grant:**
+      - We grant you a limited, non-exclusive license
+      - License is revocable and non-transferable
+      - Subject to compliance with these Terms
+      - No right to sublicense or redistribute
+  
+  - title: Privacy and Data Protection
+    content: |
+      Your privacy is important to us. Our collection and use of personal information is governed by our Privacy Policy:
+      
+      **Data Collection:**
+      - Information you provide during registration
+      - Usage data and analytics information
+      - Communication and support interactions
+      - Payment and billing information
+      
+      **Data Use:**
+      - Providing and improving our services
+      - Communication and support
+      - Security and fraud prevention
+      - Compliance with legal obligations
+      
+      **Data Protection:**
+      - Industry-standard security measures
+      - Encryption and access controls
+      - Regular security audits
+      - Compliance with data protection laws
+  
+  - title: Payment Terms and Billing
+    content: |
+      Our services are offered on a subscription basis with various pricing tiers:
+      
+      **Pricing and Plans:**
+      - Transparent, usage-based pricing
+      - Multiple plan options available
+      - Volume discounts for larger usage
+      - Enterprise pricing for custom needs
+      
+      **Billing and Payment:**
+      - Monthly or annual billing cycles
+      - Automatic renewal unless cancelled
+      - Payment due upon invoice receipt
+      - Late payment fees may apply
+      
+      **Refunds and Cancellations:**
+      - 30-day money-back guarantee
+      - Pro-rated refunds for plan changes
+      - No refunds for service violations
+      - Cancellation effective at billing cycle end
+  
+  - title: Service Availability and Support
+    content: |
+      We strive to provide reliable and high-quality services:
+      
+      **Service Levels:**
+      - 99.9% uptime commitment
+      - Performance monitoring and optimization
+      - Regular maintenance and updates
+      - Disaster recovery and backup procedures
+      
+      **Support Services:**
+      - Multiple support channels available
+      - Response time commitments
+      - Documentation and knowledge base
+      - Community forums and resources
+      
+      **Maintenance and Updates:**
+      - Scheduled maintenance windows
+      - Advance notification of changes
+      - Backward compatibility efforts
+      - Emergency maintenance procedures
+  
+  - title: Limitation of Liability
+    content: |
+      Our liability is limited as follows:
+      
+      **Liability Limits:**
+      - Maximum liability limited to fees paid
+      - No liability for indirect damages
+      - No liability for lost profits or data
+      - No liability for third-party actions
+      
+      **Exclusions:**
+      - Intentional misconduct or fraud
+      - Violation of intellectual property rights
+      - Personal injury or property damage
+      - Violation of applicable laws
+      
+      **Indemnification:**
+      - You agree to indemnify us for claims
+      - Claims arising from your use of services
+      - Claims related to your content
+      - Claims from third parties
+  
+  - title: Dispute Resolution
+    content: |
+      We prefer to resolve disputes amicably:
+      
+      **Informal Resolution:**
+      - Direct communication and negotiation
+      - Support team assistance
+      - Escalation to management
+      - Mediation if appropriate
+      
+      **Formal Proceedings:**
+      - Binding arbitration for disputes
+      - Applicable law and jurisdiction
+      - Class action waivers
+      - Small claims court exceptions
+      
+      **Governing Law:**
+      - Laws of the State of California
+      - Federal law where applicable
+      - International law considerations
+      - Conflict of law provisions
+  
+  - title: Termination and Suspension
+    content: |
+      We may terminate or suspend access to our services:
+      
+      **Termination Reasons:**
+      - Violation of these Terms
+      - Non-payment of fees
+      - Extended period of inactivity
+      - Request for account deletion
+      
+      **Suspension Reasons:**
+      - Investigation of potential violations
+      - Security concerns or threats
+      - Excessive resource usage
+      - Payment processing issues
+      
+      **Effects of Termination:**
+      - Immediate cessation of services
+      - Data retention and deletion
+      - Outstanding payment obligations
+      - Return of company property
+  
+  - title: Changes to Terms and Services
+    content: |
+      We may modify these Terms and our services:
+      
+      **Term Changes:**
+      - Advance notice of material changes
+      - Continued use constitutes acceptance
+      - Right to reject changes and terminate
+      - Historical terms available upon request
+      
+      **Service Changes:**
+      - Feature additions and removals
+      - Pricing and plan modifications
+      - Service level adjustments
+      - Technology and infrastructure updates
+      
+      **Notification Methods:**
+      - Email notifications
+      - Platform announcements
+      - Website updates
+      - Direct communication
+  
+  - title: Contact Information
+    content: |
+      For questions about these Terms or our services:
+      
+      **General Inquiries:**
+      - Email: legal@company.com
+      - Phone: +1 (415) 555-0123
+      - Address: 123 Innovation Drive, San Francisco, CA 94105
+      
+      **Legal Department:**
+      - Email: legal@company.com
+      - Dedicated legal support line
+      - Response within 2 business days
+      
+      **Support Team:**
+      - Email: support@company.com
+      - Live chat and phone support
+      - Knowledge base and documentation
+      - Community forums

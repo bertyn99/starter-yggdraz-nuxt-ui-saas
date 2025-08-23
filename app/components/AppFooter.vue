@@ -2,13 +2,16 @@
 const columns = [{
   label: 'Resources',
   children: [{
-    label: 'Help center'
+    label: 'Help center',
+    to: '/faq'
   }, {
-    label: 'Docs'
+    label: 'Docs',
+    to: '/docs'
   }, {
     label: 'Roadmap'
   }, {
-    label: 'Changelog'
+    label: 'Changelog',
+    to: '/changelog'
   }]
 }, {
   label: 'Features',
@@ -26,11 +29,25 @@ const columns = [{
   children: [{
     label: 'About'
   }, {
-    label: 'Pricing'
+    label: 'Pricing',
+    to: '/pricing'
   }, {
     label: 'Careers'
   }, {
-    label: 'Blog'
+    label: 'Blog',
+    to: '/blog'
+  }]
+}, {
+  label: 'Legal',
+  children: [{
+    label: 'Privacy Policy',
+    to: '/privacy-policy'
+  }, {
+    label: 'Terms of Service',
+    to: '/terms-of-service'
+  }, {
+    label: 'Contact',
+    to: '/contact'
   }]
 }]
 

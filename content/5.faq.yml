@@ -1,0 +1,78 @@
+title: Frequently Asked Questions
+description: Find answers to common questions about our platform, features, and services.
+seo:
+  title: FAQ - Frequently Asked Questions
+  description: Get answers to common questions about our SaaS platform, features, pricing, and support.
+navigation: false
+sections:
+  - title: Getting Started
+    description: Common questions for new users
+    items:
+      - question: How do I get started with the platform?
+        answer: Getting started is easy! Simply sign up for an account, choose your plan, and follow our step-by-step onboarding guide. We'll walk you through setting up your first project in minutes.
+      - question: What are the system requirements?
+        answer: Our platform is web-based and works on any modern browser. We support Chrome, Firefox, Safari, and Edge. No software installation is required.
+      - question: Can I try before I buy?
+        answer: Absolutely! We offer a 14-day free trial on all plans with full access to all features. No credit card required to start your trial.
+      - question: How long does setup take?
+        answer: Most users can get their first project up and running in under 30 minutes. Our intuitive interface and comprehensive documentation make setup quick and straightforward.
+  
+  - title: Features & Functionality
+    description: Questions about platform capabilities
+    items:
+      - question: What integrations do you support?
+        answer: We integrate with popular tools like GitHub, GitLab, Slack, Discord, and many more. Our API also allows you to build custom integrations for your specific needs.
+      - question: Can I customize the platform?
+        answer: Yes! Our platform is highly customizable. You can customize themes, workflows, notifications, and even build custom extensions using our developer API.
+      - question: Is there a mobile app?
+        answer: While we don't have native mobile apps yet, our platform is fully responsive and works great on all mobile devices. We're working on native apps for iOS and Android.
+      - question: Do you support multiple languages?
+        answer: Currently, we support English, Spanish, French, German, and Japanese. More languages are being added regularly based on user demand.
+  
+  - title: Pricing & Billing
+    description: Questions about costs and billing
+    items:
+      - question: How does pricing work?
+        answer: We offer transparent, usage-based pricing. You pay only for what you use, with no hidden fees. We also offer volume discounts for larger teams.
+      - question: Can I change my plan anytime?
+        answer: Yes! You can upgrade, downgrade, or cancel your plan at any time. Changes take effect immediately, and we'll prorate any billing adjustments.
+      - question: Do you offer refunds?
+        answer: We offer a 30-day money-back guarantee. If you're not satisfied with our platform, contact our support team for a full refund.
+      - question: Is there a free plan?
+        answer: We offer a generous free tier that includes core features for small projects. This is perfect for trying out the platform or for personal projects.
+  
+  - title: Security & Privacy
+    description: Questions about data protection
+    items:
+      - question: Is my data secure?
+        answer: Absolutely. We use enterprise-grade security with end-to-end encryption, SOC 2 Type II compliance, and regular security audits. Your data is protected by bank-level security measures.
+      - question: Where is my data stored?
+        answer: We use multiple secure data centers across different geographic regions for redundancy and compliance. You can choose your preferred data region during setup.
+      - question: Do you backup my data?
+        answer: Yes, we perform automated backups every hour and store them in multiple secure locations. We also offer point-in-time recovery for up to 30 days.
+      - question: Can I export my data?
+        answer: Yes, you can export your data at any time in multiple formats (JSON, CSV, XML). We also provide APIs for programmatic data access.
+  
+  - title: Support & Help
+    description: Questions about getting help
+    items:
+      - question: What support options are available?
+        answer: We offer multiple support channels including email, live chat, and phone support for enterprise customers. Our comprehensive documentation and video tutorials are also available 24/7.
+      - question: How quickly do you respond to support requests?
+        answer: We typically respond to support requests within 2-4 hours during business hours. Enterprise customers get priority support with guaranteed response times.
+      - question: Do you offer training?
+        answer: Yes! We offer free onboarding sessions, webinars, and custom training for enterprise customers. Our success team is here to ensure you get the most out of our platform.
+      - question: Is there a community forum?
+        answer: We have an active community forum where users can ask questions, share tips, and connect with other users. Our team also actively participates in discussions.
+  
+  - title: Enterprise & Teams
+    description: Questions for business users
+    items:
+      - question: Do you offer enterprise plans?
+        answer: Yes! We offer enterprise plans with advanced features, dedicated support, custom integrations, and volume pricing. Contact our sales team for a custom quote.
+      - question: Can I manage team permissions?
+        answer: Absolutely. Our role-based access control allows you to set granular permissions for team members, ensuring everyone has the right level of access.
+      - question: Do you offer SSO integration?
+        answer: Yes, we support SAML 2.0 and OAuth 2.0 for single sign-on integration with your existing identity providers like Active Directory, Okta, or Google Workspace.
+      - question: Can you help with migration?
+        answer: Yes! Our professional services team can help you migrate from existing tools. We offer migration assistance, data mapping, and training to ensure a smooth transition.

@@ -142,5 +142,105 @@ export const collections = {
       date: z.date(),
       image: z.string()
     })
+  }),
+  faq: defineCollection({
+    source: '5.faq.yml',
+    type: 'page',
+    schema: z.object({
+      sections: z.array(
+        z.object({
+          title: z.string().nonempty(),
+          description: z.string().nonempty(),
+          items: z.array(
+            z.object({
+              question: z.string().nonempty(),
+              answer: z.string().nonempty()
+            })
+          )
+        })
+      )
+    })
+  }),
+  contact: defineCollection({
+    source: '6.contact.yml',
+    type: 'page',
+    schema: z.object({
+      hero: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        links: z.array(createLinkSchema())
+      }),
+      contact_info: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        methods: z.array(
+          z.object({
+            title: z.string().nonempty(),
+            description: z.string().nonempty(),
+            icon: z.string().nonempty(),
+            contact: z.string().nonempty(),
+            response_time: z.string().nonempty()
+          })
+        )
+      }),
+      office_locations: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        locations: z.array(
+          z.object({
+            city: z.string().nonempty(),
+            country: z.string().nonempty(),
+            address: z.string().nonempty(),
+            phone: z.string().nonempty(),
+            hours: z.string().nonempty()
+          })
+        )
+      }),
+      social_media: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        platforms: z.array(
+          z.object({
+            name: z.string().nonempty(),
+            handle: z.string().nonempty(),
+            url: z.string().nonempty(),
+            icon: z.string().nonempty()
+          })
+        )
+      }),
+      faq_preview: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        link: createLinkSchema()
+      })
+    })
+  }),
+  privacy_policy: defineCollection({
+    source: '7.privacy-policy.yml',
+    type: 'page',
+    schema: z.object({
+      last_updated: z.string().nonempty(),
+      effective_date: z.string().nonempty(),
+      sections: z.array(
+        z.object({
+          title: z.string().nonempty(),
+          content: z.string().nonempty()
+        })
+      )
+    })
+  }),
+  terms_of_service: defineCollection({
+    source: '8.terms-of-service.yml',
+    type: 'page',
+    schema: z.object({
+      last_updated: z.string().nonempty(),
+      effective_date: z.string().nonempty(),
+      sections: z.array(
+        z.object({
+          title: z.string().nonempty(),
+          content: z.string().nonempty()
+        })
+      )
+    })
   })
 }
