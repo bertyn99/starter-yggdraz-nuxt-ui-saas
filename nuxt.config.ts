@@ -23,7 +23,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-10-17',
   nitro: {
     experimental: {
-      database: true
+      database: true,
+      tasks: true
     },
     prerender: {
       routes: [
