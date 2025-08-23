@@ -18,12 +18,15 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - **Iconify integration** - 100,000+ icons from Lucide and Simple Icons
 
 ### 🔐 **Authentication & Security**
-- **nuxt-auth-utils** - Modern authentication system
-- **Multi-provider support** - Credentials, Google, Facebook, Apple, Twitter, GitHub
-- **Session management** - Secure token-based sessions
-- **Role-based access control** - User, Admin, Staff roles
-- **Security headers** - CSRF protection, secure cookies
-- **Password hashing** - Argon2 for secure password storage
+- [x] **nuxt-auth-utils** - Modern authentication system
+- [x] **Multi-provider support** - Credentials, Google, Facebook, Apple, Twitter, GitHub
+- [x] **Session management** - Secure token-based sessions
+- [ ] **Role-based access control** - User, Admin, Staff roles
+- [ ] **Security headers** - CSRF protection, secure cookies
+- [ ] **Password hashing** - Argon2 for secure password storage
+- [ ] **Authorization** - Role-based access control
+- [ ] **Permissions** - Define permissions for each resource/action
+- [ ] **Ability** - Define abilities for each resource/action
 
 ### 🗄️ **Database & ORM**
 - **Drizzle ORM** - Type-safe database toolkit
@@ -34,45 +37,65 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - **Database studio** - Visual database management
 
 ### 📝 **Content Management**
-- **Nuxt Content** - File-based CMS with Markdown support
-- **Structured content** - YAML-based content schemas
-- **SEO optimization** - Meta tags, Open Graph, structured data
-- **Blog system** - Complete blogging platform
-- **Dynamic routing** - Auto-generated pages from content
+- [x] **Nuxt Content** - File-based CMS with Markdown support
+- [x] **Structured content** - YAML-based content schemas
+- [x] **SEO optimization** - Meta tags, Open Graph, structured data
+- [x] **Blog system** - Complete blogging platform
+- [x] **Dynamic routing** - Auto-generated pages from content
+- [ ] **Changelog** - Changelog file
+- [ ] **Documentation** - Documentation for the project
+- [ ] **FAQ** - FAQ for the project
+- [ ] **Contact** - Contact page for the project
+- [ ] **Privacy Policy** - Privacy policy for the project
+- [ ] **Terms of Service** - Terms of service for the project
+- [ ] **Cookie Policy** - Cookie policy for the project
 
 ### 🚀 **Performance & SEO**
-- **Nuxt Image** - Optimized image handling
-- **Static generation** - Pre-rendered pages for speed
-- **SEO module** - Advanced search engine optimization
-- **Meta management** - Dynamic meta tags
-- **Performance monitoring** - Built-in devtools
+- [x] **Nuxt Image** - Optimized image handling
+- [x] **Static generation** - Pre-rendered pages for speed
+- [x] **SEO module** - Advanced search engine optimization
+- [ ] **Og-image** - Open Graph image generation
+- [ ] **Sitemap** - Sitemap generation
+- [ ] **Robots.txt** - Robots.txt generation
+- [ ] **RSS Feed** - RSS feed generation
+- [ ] **JSON Feed** - JSON feed generation
+- [ ] **Meta management** - Dynamic meta tags
+- [x] **Performance monitoring** - Built-in devtools
 
 ### 🛠️ **Development Experience**
-- **TypeScript** - Full type safety
-- **ESLint** - Code quality and consistency
-- **Hot reload** - Instant development feedback
-- **VS Code support** - Optimized development environment
-- **Git integration** - Version control ready
+- [x] **TypeScript** - Full type safety
+- [x] **ESLint** - Code quality and consistency
+- [x] **Hot reload** - Instant development feedback
+- [x] **VS Code support** - Optimized development environment
+- [x] **Git integration** - Version control ready
 
 ## 🔄 **Planned Features**
 
 ### **🔐 Enhanced Authentication & Security**
-- **Social Authentication** - Google OAuth and GitHub OAuth integration
-- **Forgot Password Flow** - Secure password reset with email verification
-- **Email Verification** - Account verification on signup
-- **Password Change Notifications** - Email alerts when passwords are updated
+- [ ] **Social Authentication** - Google OAuth and GitHub OAuth integration
+- [ ] **Forgot Password Flow** - Secure password reset with email verification
+- [ ] **Email Verification** - Account verification on signup
+- [ ] **Password Change Notifications** - Email alerts when passwords are updated
 
 ### **📧 Email Infrastructure**
-- **Email Service Layer** - Centralized email handling with service utilities
-- **Welcome Emails** - Automated onboarding emails for new users
-- **Transactional Emails** - Password reset, verification, and security notifications
-- **Email Templates** - Professional, branded email designs
+- [ ] **Email Service Layer** - Centralized email handling with service utilities
+- [ ] **Welcome Emails** - Automated onboarding emails for new users
+- [ ] **Transactional Emails** - Password reset, verification, and security notifications
+- [ ] **Email Templates** - Professional, branded email designs
 
 ### **🔄 User Experience Improvements**
-- **Account Recovery** - Multiple recovery options and security measures
-- **Profile Management** - Enhanced user profile customization
-- **Session Management** - Better control over active sessions
-- **Security Dashboard** - User security settings and activity monitoring
+- [ ] **Account Recovery** - Multiple recovery options and security measures
+- [ ] **Profile Management** - Enhanced user profile customization
+- [ ] **Session Management** - Better control over active sessions
+- [ ] **Security Dashboard** - User security settings and activity monitoring
+
+### **💳 Payment & Subscription Management**
+- [ ] **Stripe Integration** - Secure payment processing with Stripe
+- [ ] **One-time Payments** - Handle single purchases and upgrades
+- [ ] **Subscription Management** - Recurring billing with multiple plan tiers
+- [ ] **Payment History** - User dashboard for transaction tracking
+- [ ] **Webhook Handling** - Real-time payment event processing
+- [ ] **Invoice Generation** - Automated billing and receipt creation
 
 ## 📦 **Libraries & Dependencies**
 
@@ -89,6 +112,7 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 ### **Authentication & Security**
 - **nuxt-auth-utils** - Modern authentication utilities
 - **@node-rs/argon2** - Fast password hashing
+- **nuxt-authorization** - Authorization module
 - **nuxt-security** - Security headers and protection
 - **zod** - Schema validation
 
@@ -178,8 +202,7 @@ export default defineConfig({
 export default defineNuxtConfig({
   // ... other config
   content: {
-    database: {
-
+    database: {}
   }
 })
 ```
