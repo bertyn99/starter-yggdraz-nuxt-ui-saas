@@ -29,7 +29,7 @@ interface SessionOptions {
 }
 
 export class SessionService {
-    private config: SessionConfig
+    public config: SessionConfig
     private db: ReturnType<typeof useDB>
 
     constructor(config?: Partial<SessionConfig>) {
