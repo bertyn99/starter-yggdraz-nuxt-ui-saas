@@ -33,9 +33,22 @@ export default defineNuxtConfig({
       crawlLinks: true
     }
   },
-  /*   security: {
-      csrf: true,
-    }, */
+  security: {
+    /*  csrf: true,
+     crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
+    contentSecurityPolicy: {
+      'base-uri': ["'self'"],
+      'font-src': ["'self'", 'https:', 'data:'],
+      'form-action': ["'self'"],
+      'frame-ancestors': ["'none'"],
+      'img-src': ["'self'", 'data:', 'https:'],
+      'object-src': ["'none'"],
+      'script-src-attr': ["'none'"],
+      'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+      'script-src': ["'self'", 'https:'],
+      'upgrade-insecure-requests': true
+    } */
+  },
   eslint: {
     config: {
       stylistic: {
