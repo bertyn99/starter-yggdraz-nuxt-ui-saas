@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    maxAge: 60 * 60 * 24 * 3, // 3 days
     cookie: {
       httpOnly: true,
       secure: true, // work with https

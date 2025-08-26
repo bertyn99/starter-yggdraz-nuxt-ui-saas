@@ -5,7 +5,7 @@ import { loginSchema } from '../../../shared/schemas/auth'
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readValidatedBody(event, loginSchema.safeParse)
+    const body = await readValidatedBody(event, loginSchema.parse)
 
     const { email, password } = body
 
@@ -44,35 +44,19 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Create session in DB
-    const sessionToken = crypto.randomUUID()
-    await db.insert(sessions).values({
-      userId: user.id,
-      token: sessionToken,
-      userAgent: event.headers.get('user-agent'),
-      ipAddress: event.headers.get('x-forwarded-for') || event.node.req.socket.remoteAddress,
-      expiresAt: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000) // 1 week
-    })
-
-    // Create session
-    await setUserSession(event, {
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        username: user.username
-      }
-    })
-
-    return {
+    // Create session using service
+    const session = await sessionService.createSession(user.id, event, {
       id: user.id,
       email: user.email,
       role: user.role,
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName
-    }
-  } catch (error: unknown) {
+    })
+
+
+    return session.user
+  } catch (error: any) {
     console.error('Login error:', error)
     throw createError({
       statusCode: error.statusCode || 500,

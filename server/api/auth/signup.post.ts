@@ -3,23 +3,23 @@ import { users, accounts } from '../../db/schemas/auth-schema'
 import { signupSchema } from '../../../shared/schemas/auth'
 
 export default defineEventHandler(async (event) => {
-  const body = await readValidatedBody(event, signupSchema.safeParse)
+  const body = await readValidatedBody(event, signupSchema.parse)
 
   // Check if validation was successful
-  if (!body.success) {
-    throw createError({
-      statusCode: 400,
-      message: 'Invalid request data',
-      data: body.error.issues
-    })
-  }
+  /*  if (!body.success) {
+     throw createError({
+       statusCode: 400,
+       message: 'Invalid request data',
+       data: body.error.issues
+     })
+   } */
 
-  const { email, username, password, firstName, lastName } = body.data
+  const { email, username, password, firstName, lastName } = body
 
   const db = useDB()
   const hashedPassword = await argon2.hash(password)
 
-  console.log(body.data)
+  console.log(body)
   try {
     // Insert user data into database
     const [user] = await db.insert(users).values({
@@ -39,16 +39,16 @@ export default defineEventHandler(async (event) => {
       hashedPassword
     })
 
-    // Create session
-    await setUserSession(event, {
-      user: {
-        id: user?.id,
-        email: user?.email,
-        role: user?.role,
-        username: user?.username
-      },
-      loggedInAt: new Date()
+    // Create session using service
+    const session = await sessionService.createSession(user.id, event, {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName
     })
+
 
     // save cu
 
