@@ -1,25 +1,17 @@
+// server/api/auth/signup.post.ts
 import * as argon2 from '@node-rs/argon2'
 import { users, accounts } from '../../db/schemas/auth-schema'
 import { signupSchema } from '../../../shared/schemas/auth'
+import { sessionService } from '../../utils/session'
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, signupSchema.parse)
-
-  // Check if validation was successful
-  /*  if (!body.success) {
-     throw createError({
-       statusCode: 400,
-       message: 'Invalid request data',
-       data: body.error.issues
-     })
-   } */
 
   const { email, username, password, firstName, lastName } = body
 
   const db = useDB()
   const hashedPassword = await argon2.hash(password)
 
-  console.log(body)
   try {
     // Insert user data into database
     const [user] = await db.insert(users).values({
@@ -34,8 +26,8 @@ export default defineEventHandler(async (event) => {
     // Create account record for credentials provider
     await db.insert(accounts).values({
       provider: 'credentials',
-      providerAccountId: user?.id,
-      userId: user?.id,
+      providerAccountId: user.id,
+      userId: user.id,
       hashedPassword
     })
 
@@ -43,25 +35,15 @@ export default defineEventHandler(async (event) => {
     const session = await sessionService.createSession(user.id, event, {
       id: user.id,
       email: user.email,
-      role: user.role,
+      /* role: user.role, */
       username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName
+      firstName: user.firstName || '',
+      lastName: user.lastName || ''
     })
-
-
-    // save cu
 
     return {
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role
-      }
+      user: session.user
     }
   } catch (error) {
     console.error('Error creating user:', error)

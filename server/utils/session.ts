@@ -21,7 +21,7 @@ interface SessionConfig {
 interface UserData {
     id: string
     email: string
-    role: string
+    /* role: string */
     username: string
 }
 
@@ -127,7 +127,7 @@ export class SessionService {
             const dbSession = await this.db.query.sessions.findFirst({
                 where: and(
                     eq(sessions.id, session.sessionId),
-                    eq(sessions.userId, session.user.id),
+                    eq(sessions.userId, session.user?.id),
                     lt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
                 ),
                 with: {
@@ -373,5 +373,102 @@ export class SessionService {
         }
     }
 
-    // ... rest of the methods remain the same but with fixed timestamp comparisons
+    /**
+ * Enforce maximum sessions per user
+ */
+    private async enforceMaxSessions(userId: string) {
+        try {
+            const userSessionCount = await this.db.query.sessions.findMany({
+                where: and(
+                    eq(sessions.userId, userId),
+                    lt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
+                )
+            })
+
+            if (userSessionCount.length >= this.config.maxSessions) {
+                // Remove oldest sessions
+                const sessionsToRemove = userSessionCount
+                    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+                    .slice(0, userSessionCount.length - this.config.maxSessions + 1)
+
+                for (const session of sessionsToRemove) {
+                    await this.db.delete(sessions).where(eq(sessions.id, session.id))
+                }
+            }
+        } catch (error) {
+            console.error('Error enforcing max sessions:', error)
+        }
+    }
+
+    /**
+     * Track session activity
+     */
+    private async trackSessionActivity(sessionId: string, event: H3Event) {
+        try {
+            await this.db.update(sessions)
+                .set({
+                    updatedAt: new Date(),
+                    userAgent: event.headers.get('user-agent'),
+                    ipAddress: this.getClientIP(event)
+                })
+                .where(eq(sessions.id, sessionId))
+        } catch (error) {
+            console.error('Error tracking session activity:', error)
+        }
+    }
+
+    /**
+     * Get client IP address
+     */
+    private getClientIP(event: H3Event): string {
+        return event.headers.get('x-forwarded-for') ||
+            event.headers.get('x-real-ip') ||
+            event.node.req.socket.remoteAddress ||
+            'unknown'
+    }
+
+    /**
+     * Clean up expired sessions
+     */
+    async cleanupExpiredSessions() {
+        try {
+            const result = await this.db.delete(sessions)
+                .where(lt(sessions.expiresAt, sql`(strftime('%s', 'now'))`))
+
+            return result.changes || 0
+        } catch (error) {
+            console.error('Error cleaning up expired sessions:', error)
+            return 0
+        }
+    }
+
+    /**
+     * Revoke current session
+     */
+    async revokeCurrentSession(event: H3Event, reason?: string) {
+        try {
+            const session = await getUserSession(event)
+
+            if (!session?.sessionId) {
+                return false
+            }
+
+            // Mark session as revoked in database
+            await this.db.update(sessions)
+                .set({
+                    updatedAt: new Date()
+                })
+                .where(eq(sessions.id, session.sessionId))
+
+            // Clear cookie session
+            await clearUserSession(event)
+
+            return true
+        } catch (error) {
+            console.error('Error revoking session:', error)
+            return false
+        }
+    }
 }
+
+export const sessionService = new SessionService()

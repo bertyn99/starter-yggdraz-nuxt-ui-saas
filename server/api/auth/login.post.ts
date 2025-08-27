@@ -1,14 +1,15 @@
+// server/api/auth/login.post.ts
 import * as argon2 from '@node-rs/argon2'
 import { eq } from 'drizzle-orm'
-import { users, sessions, accounts } from '../../db/schemas/auth-schema'
+import { users, accounts } from '../../db/schemas/auth-schema'
 import { loginSchema } from '../../../shared/schemas/auth'
+import { sessionService } from '../../utils/session'
 
 export default defineEventHandler(async (event) => {
   try {
     const body = await readValidatedBody(event, loginSchema.parse)
 
     const { email, password } = body
-
     const db = useDB()
 
     // Find user by email
@@ -48,12 +49,11 @@ export default defineEventHandler(async (event) => {
     const session = await sessionService.createSession(user.id, event, {
       id: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'user',
       username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName
+      firstName: user.firstName || '',
+      lastName: user.lastName || ''
     })
-
 
     return session.user
   } catch (error: any) {

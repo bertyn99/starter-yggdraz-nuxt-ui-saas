@@ -1,4 +1,4 @@
-// server/plugins/session.ts
+import { sessionService } from '../utils/session'
 
 export default defineNitroPlugin(() => {
     sessionHooks.hook('fetch', async (session, event) => {
