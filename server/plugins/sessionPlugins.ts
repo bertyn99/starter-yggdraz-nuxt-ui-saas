@@ -1,5 +1,4 @@
 // server/plugins/session.ts
-import { sessionService } from '../utils/session'
 
 export default defineNitroPlugin(() => {
     sessionHooks.hook('fetch', async (session, event) => {
@@ -7,8 +6,8 @@ export default defineNitroPlugin(() => {
             throw createError({ statusCode: 401, message: 'Invalid session' })
         }
 
-        // Validate session against database
-        const validatedSession = await sessionService.validateSession(event)
+        // Use enhanced getSession method
+        const validatedSession = await sessionService.getSession(event)
         if (!validatedSession) {
             throw createError({ statusCode: 401, message: 'Session expired or invalid' })
         }
@@ -21,7 +20,6 @@ export default defineNitroPlugin(() => {
             }
         }
 
-        // Return enhanced session data
         return {
             ...session,
             lastActivity: validatedSession.lastActivity,
