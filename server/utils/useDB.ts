@@ -21,8 +21,23 @@ export function useDB() {
     //if we use a postgres database
     /*
       const pool = new Pool({
+        max: parseInt(process.env.PGPOOL_MAX ?? '5', 10),
         connectionString: process.env.DATABASE_URL!,
+        connectionTimeoutMillis: parseInt(process.env.PG_CONN_TIMEOUT ?? '5000', 10),
       });
+
+      pool.on('connect', async (client) => {
+      // Session hardening; wrap in try/catch to avoid failing the connection
+        try {
+          await client.query(`SET TIME ZONE 'UTC'`)
+          await client.query(`SET application_name = $1`, [process.env.PG_APP_NAME ?? 'nuxt-app'])
+          await client.query(`SET statement_timeout = ${parseInt(process.env.PG_STATEMENT_TIMEOUT ?? '5000', 10)}`)
+          await client.query(`SET idle_in_transaction_session_timeout = ${parseInt(process.env.PG_IDLE_TX_TIMEOUT ?? '30000', 10)}`)
+          await client.query(`SET lock_timeout = ${parseInt(process.env.PG_LOCK_TIMEOUT ?? '5000', 10)}`)
+        } catch (e) {
+          console.warn('pg connect session setup failed:', e)
+        }
+      })
 
       drizzleInstance = drizzle(pool, { schema: { ...authSchema, ...schema } })
       console.log('A new instance of drizzle has been created')
