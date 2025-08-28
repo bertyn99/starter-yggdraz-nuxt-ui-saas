@@ -1,5 +1,5 @@
 // server/utils/session.ts
-import { eq, and, lt, ne, sql, desc } from 'drizzle-orm'
+import { eq, and, lt, gt, ne, sql, desc } from 'drizzle-orm'
 import { sessions, users } from '../db/schemas/auth-schema'
 import type { H3Event } from 'h3'
 
@@ -23,6 +23,8 @@ interface UserData {
     email: string
     /* role: string */
     username: string
+    firstName?: string
+    lastName?: string
 }
 
 interface SessionOptions {
@@ -127,8 +129,8 @@ export class SessionService {
             const dbSession = await this.db.query.sessions.findFirst({
                 where: and(
                     eq(sessions.id, session.sessionId),
-                    eq(sessions.userId, session.user?.id),
-                    lt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
+                    eq(sessions.userId, session.user?.id || ''),
+                    gt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
                 ),
                 with: {
                     user: true
@@ -225,12 +227,17 @@ export class SessionService {
     }
 
     /**
-     * Check session freshness (Better Auth style)
+     * Check session freshness (Better Auth style) - Optimized to prevent memory issues
      */
     async checkSessionFreshness(sessionId: string, requiredAge?: number): Promise<boolean> {
         try {
+            // Use a more efficient query - only fetch what we need
             const session = await this.db.query.sessions.findFirst({
-                where: eq(sessions.id, sessionId)
+                where: eq(sessions.id, sessionId),
+                columns: {
+                    updatedAt: true,
+                    createdAt: true
+                }
             })
 
             if (!session) {
@@ -290,7 +297,7 @@ export class SessionService {
             const userSessions = await this.db.query.sessions.findMany({
                 where: and(
                     eq(sessions.userId, userId),
-                    lt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
+                    sql`sessions.expires_at > (strftime('%s', 'now'))`
                 ),
                 orderBy: [desc(sessions.updatedAt)]
             })
@@ -378,19 +385,30 @@ export class SessionService {
  */
     private async enforceMaxSessions(userId: string) {
         try {
-            const userSessionCount = await this.db.query.sessions.findMany({
+            // Use a more efficient approach to avoid memory issues
+            // First, count active sessions
+            const activeSessionCount = await this.db.query.sessions.findMany({
                 where: and(
                     eq(sessions.userId, userId),
-                    lt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
-                )
+                    gt(sessions.expiresAt, sql`(strftime('%s', 'now'))`)
+
+                ),
+                columns: { id: true } // Only fetch IDs to minimize memory usage
             })
 
-            if (userSessionCount.length >= this.config.maxSessions) {
-                // Remove oldest sessions
-                const sessionsToRemove = userSessionCount
-                    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
-                    .slice(0, userSessionCount.length - this.config.maxSessions + 1)
+            if (activeSessionCount.length >= this.config.maxSessions) {
+                // Get the oldest sessions to remove (limit to what we need to remove)
+                const sessionsToRemove = await this.db.query.sessions.findMany({
+                    where: and(
+                        eq(sessions.userId, userId),
+                        sql`sessions.expires_at > (strftime('%s', 'now'))`
+                    ),
+                    orderBy: [sessions.createdAt],
+                    limit: activeSessionCount.length - this.config.maxSessions + 1,
+                    columns: { id: true }
+                })
 
+                // Delete oldest sessions in batch
                 for (const session of sessionsToRemove) {
                     await this.db.delete(sessions).where(eq(sessions.id, session.id))
                 }

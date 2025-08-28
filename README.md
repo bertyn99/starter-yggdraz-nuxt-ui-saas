@@ -23,7 +23,7 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - [x] **Session management** - Secure token-based sessions
 - [ ] **Role-based access control** - User, Admin, Staff roles
 - [ ] **Security headers** - CSRF protection, secure cookies
-- [ ] **Password hashing** - Argon2 for secure password storage
+- [x] **Password hashing** - Argon2 for secure password storage
 - [ ] **Authorization** - Role-based access control
 - [ ] **Permissions** - Define permissions for each resource/action
 - [ ] **Ability** - Define abilities for each resource/action
@@ -42,12 +42,12 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - [x] **SEO optimization** - Meta tags, Open Graph, structured data
 - [x] **Blog system** - Complete blogging platform
 - [x] **Dynamic routing** - Auto-generated pages from content
-- [ ] **Changelog** - Changelog file
+- [x] **Changelog** - Changelog file
 - [ ] **Documentation** - Documentation for the project
-- [ ] **FAQ** - FAQ for the project
+- [x] **FAQ** - FAQ for the project
 - [ ] **Contact** - Contact page for the project
-- [ ] **Privacy Policy** - Privacy policy for the project
-- [ ] **Terms of Service** - Terms of service for the project
+- [x] **Privacy Policy** - Privacy policy for the project
+- [x] **Terms of Service** - Terms of service for the project
 
 ### 🚀 **Performance & SEO**
 - [x] **Nuxt Image** - Optimized image handling

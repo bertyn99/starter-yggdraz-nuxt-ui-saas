@@ -2,37 +2,56 @@ import { sessionService } from '../utils/session'
 
 export default defineNitroPlugin(() => {
     sessionHooks.hook('fetch', async (session, event) => {
-        if (!session.sessionId) {
-            throw createError({ statusCode: 401, message: 'Invalid session' })
-        }
-
-        // Use enhanced getSession method
-        const validatedSession = await sessionService.getSession(event)
-        if (!validatedSession) {
-            throw createError({ statusCode: 401, message: 'Session expired or invalid' })
-        }
-
-        // Check session freshness if required
-        if (sessionService.config.requireFreshness) {
-            const isFresh = await sessionService.checkSessionFreshness(session.sessionId)
-            if (!isFresh) {
-                throw createError({ statusCode: 401, message: 'Session not fresh' })
+        try {
+            if (!session?.sessionId) {
+                throw createError({ statusCode: 401, message: 'Invalid session' })
             }
-        }
 
-        return {
-            ...session,
-            lastActivity: validatedSession.lastActivity,
-            sessionMetadata: {
-                ipAddress: validatedSession.dbSession.ipAddress,
-                userAgent: validatedSession.dbSession.userAgent
+            // Use enhanced getSession method with error handling
+            const validatedSession = await sessionService.getSession(event)
+            if (!validatedSession) {
+                throw createError({ statusCode: 401, message: 'Session expired or invalid' })
             }
+
+            // Check session freshness if required (only when enabled)
+            if (sessionService.config.requireFreshness && validatedSession.sessionId) {
+                const isFresh = await sessionService.checkSessionFreshness(validatedSession.sessionId)
+                if (!isFresh) {
+                    throw createError({ statusCode: 401, message: 'Session not fresh' })
+                }
+            }
+
+            // Safe access to session data with null checks
+            const sessionMetadata = validatedSession.dbSession ? {
+                ipAddress: validatedSession.dbSession.ipAddress || 'unknown',
+                userAgent: validatedSession.dbSession.userAgent || 'unknown'
+            } : {
+                ipAddress: 'unknown',
+                userAgent: 'unknown'
+            }
+
+            return {
+                ...session,
+                lastActivity: validatedSession.lastActivity || new Date(),
+                sessionMetadata
+            }
+        } catch (error) {
+            console.error('Session validation error:', error)
+            // Clear invalid session to prevent memory leaks
+            await clearUserSession(event)
+            throw createError({ statusCode: 401, message: 'Session validation failed' })
         }
     })
 
     sessionHooks.hook('clear', async (session, event) => {
-        if (session.sessionId) {
-            await sessionService.revokeCurrentSession(event, 'logout')
+        try {
+            if (session?.sessionId) {
+                await sessionService.revokeCurrentSession(event, 'logout')
+            }
+        } catch (error) {
+            console.error('Session clear error:', error)
+            // Ensure session is cleared even if revocation fails
+            await clearUserSession(event)
         }
     })
 })

@@ -12,7 +12,7 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const { register, error } = useAuth()
+const { signup, error } = useAuth()
 
 const fields = [{
   name: 'username',
@@ -76,11 +76,11 @@ type Schema = SignupSchema
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
   console.log('Submitted', payload)
 
-  const res = await register(payload.data)
-
+  const res = await signup(payload.data)
+  console.log('res', res)
   if (res) {
     // redirect where you want
-    navigateTo('/')
+    navigateTo('/dashboard/protected')
   }
 }
 </script>

@@ -32,7 +32,7 @@ export const useAuth = () => {
     }
   }
 
-  async function register(credentials: SignupSchema) {
+  async function signup(credentials: SignupSchema) {
     try {
       loading.value = true
       error.value = null
@@ -61,6 +61,6 @@ export const useAuth = () => {
     loading,
     error,
     login,
-    register
+    signup
   }
 }
