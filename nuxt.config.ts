@@ -1,7 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const isProd = process.env.NODE_ENV === 'production'
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui-pro', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/image', '@nuxt/content', '@nuxtjs/seo', 'nuxt-security'],
+  modules: [
+    '@nuxt/ui-pro',
+    '@nuxt/eslint',
+    'nuxt-auth-utils',
+    '@nuxt/image',
+    '@nuxt/content',
+    '@nuxtjs/seo',
+    'nuxt-security',
+    '@unlok-co/nuxt-stripe'
+  ],
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   content: {
@@ -41,7 +50,19 @@ export default defineNuxtConfig({
       httpOnly: true,
       secure: true, // work with https
       sameSite: 'strict'
-    }
+    },
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET_KEY,
+    stripe: {
+      key: process.env.STRIPE_SECRET_KEY,
+      options: {},
+    },
+    // Client
+    public: {
+      stripe: {
+        key: process.env.STRIPE_PUBLIC_KEY,
+        options: {},
+      },
+    },
   },
   future: {
     compatibilityVersion: 4
