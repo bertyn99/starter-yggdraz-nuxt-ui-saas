@@ -54,8 +54,8 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 - [x] **Static generation** - Pre-rendered pages for speed
 - [x] **SEO module** - Advanced search engine optimization
 - [ ] **Og-image** - Open Graph image generation
-- [ ] **Sitemap** - Sitemap generation
-- [ ] **Robots.txt** - Robots.txt generation
+- [x] **Sitemap** - Sitemap generation
+- [x] **Robots.txt** - Robots.txt generation
 - [ ] **RSS Feed** - RSS feed generation
 - [ ] **JSON Feed** - JSON feed generation
 - [ ] **Meta management** - Dynamic meta tags

@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const isProd = process.env.NODE_ENV === 'production'
 export default defineNuxtConfig({
   modules: ['@nuxt/ui-pro', '@nuxt/eslint', 'nuxt-auth-utils', '@nuxt/image', '@nuxt/content', '@nuxtjs/seo', 'nuxt-security'],
   devtools: { enabled: true },
@@ -7,6 +8,24 @@ export default defineNuxtConfig({
     database: {
       type: 'sqlite',
       filename: './server/db/data.db'
+    }
+  },
+
+  // Nuxt Site Config (via @nuxtjs/seo)
+  site: {
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    name: 'Yggdraz SaaS Starter',
+    description: 'Modern SaaS starter built with Nuxt UI Pro.',
+    indexable: isProd
+  },
+
+  // Nuxt Sitemap (enabled by @nuxtjs/seo) — rely on sensible defaults
+  sitemap: {},
+
+  // In non-production, prevent indexing via route rules
+  routeRules: isProd ? {} : {
+    '/**': {
+      robots: { index: false, follow: false }
     }
   },
 
