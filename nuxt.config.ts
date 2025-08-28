@@ -20,8 +20,14 @@ export default defineNuxtConfig({
   },
 
   // Nuxt Sitemap (enabled by @nuxtjs/seo) — rely on sensible defaults
-  sitemap: {},
-
+  sitemap: {
+    exclude: [
+      '/dashboard/**',
+      'subscription/cancel',
+      'subscription/success',
+      /* 'subscription/pay', */
+    ],
+  },
   // In non-production, prevent indexing via route rules
   routeRules: isProd ? {} : {
     '/**': {
