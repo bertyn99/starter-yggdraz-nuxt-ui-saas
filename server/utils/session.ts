@@ -479,7 +479,7 @@ export class SessionService {
                 .where(eq(sessions.id, session.sessionId))
 
             // Clear cookie session
-            await clearUserSession(event)
+            /* await clearUserSession(event) */
 
             return true
         } catch (error) {

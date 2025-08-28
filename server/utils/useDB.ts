@@ -55,7 +55,11 @@ export function useDB() {
     drizzleInstance = drizzle(sqlite, { schema: { ...authSchema, ...schema } })
     console.log('A new instance of drizzle has been created')
 
-    const close = () => { try { sqlite.close() } catch { } }
+    const close = () => {
+      try { sqlite.close() } catch {
+        console.error('Error closing database connection', e)
+      }
+    }
     process.once('SIGINT', close)
     process.once('SIGTERM', close)
     process.once('beforeExit', close)

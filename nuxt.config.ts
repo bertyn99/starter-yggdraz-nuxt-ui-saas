@@ -35,6 +35,14 @@ export default defineNuxtConfig({
     }
   },
   security: {
+    ssg: {
+      hashScripts: false // Disable hashes because they would cancel 'unsafe-inline'
+    },
+    headers: {
+      contentSecurityPolicy: {
+        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+      }
+    }
     /*  csrf: true,
      crossOriginEmbedderPolicy: process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
     contentSecurityPolicy: {

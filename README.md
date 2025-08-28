@@ -178,7 +178,7 @@ For production use, switch to PostgreSQL:
 
 1. **Install PostgreSQL dependencies:**
 ```bash
-pnpm add postgres @types/pg
+pnpm add pg
 pnpm remove better-sqlite3 @types/better-sqlite3
 ```
 
@@ -196,27 +196,36 @@ export default defineConfig({
 })
 ```
 
-3. **Update `nuxt.config.ts`:**
-```typescript
-export default defineNuxtConfig({
-  // ... other config
-  content: {
-    database: {}
+3. **Update `server/utils/useDB.ts` to use PostgreSQL:**
+```ts
+// server/utils/useDB.ts (PostgreSQL)
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { Pool } from 'pg'
+import * as schema from '../db/schemas/schema'
+import * as authSchema from '../db/schemas/auth-schema'
+
+let drizzleInstance: ReturnType<typeof drizzle> | null = null
+
+export function useDB() {
+  if (!drizzleInstance) {
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL!,
+      max: parseInt(process.env.PGPOOL_MAX ?? '5', 10),
+      connectionTimeoutMillis: parseInt(process.env.PG_CONN_TIMEOUT ?? '5000', 10),
+    })
+    drizzleInstance = drizzle(pool, { schema: { ...authSchema, ...schema } })
   }
-})
+  return drizzleInstance
+}
 ```
 
 4. **Set environment variables:**
 ```bash
-# .env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_NAME=nuxt_saas
+# .env (PostgreSQL)
+DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DB_NAME
 ```
 
-### **Option 3: NuxtHub Integration**
+### **Option 3: NuxtHub (Cloudflare D1)**
 
 To integrate with NuxtHub for managed database services:
 
@@ -225,23 +234,34 @@ To integrate with NuxtHub for managed database services:
 pnpm add @nuxthub/core
 ```
 
-2. **Update `nuxt.config.ts`:**
+2. **Enable the NuxtHub module in `nuxt.config.ts`:**
 ```typescript
 export default defineNuxtConfig({
   modules: [
-    // ... other modules
     '@nuxthub/core'
-  ],
-  hub: {
-    database: {
-      type: 'postgresql',
-      // NuxtHub will handle credentials automatically
-    }
-  }
+  ]
 })
 ```
 
-3. **Configure NuxtHub in your project settings**
+3. **Switch `server/utils/useDB.ts` to D1:**
+```ts
+// server/utils/useDB.ts (NuxtHub D1)
+import { drizzle } from 'drizzle-orm/d1'
+import { hubDatabase } from '@nuxthub/core'
+import * as schema from '../db/schemas/schema'
+import * as authSchema from '../db/schemas/auth-schema'
+
+let drizzleInstance: ReturnType<typeof drizzle> | null = null
+
+export function useDB() {
+  if (!drizzleInstance) {
+    drizzleInstance = drizzle(hubDatabase(), { schema: { ...authSchema, ...schema } })
+  }
+  return drizzleInstance
+}
+```
+
+4. **Configure NuxtHub and deploy to Cloudflare (per project setup).**
 
 ## 🔧 **Customization**
 
@@ -326,12 +346,9 @@ pnpm preview
 Set these environment variables for production:
 
 ```bash
-# Database
-DB_HOST=your_db_host
-DB_PORT=5432
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
+# Database (PostgreSQL)
+DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DB_NAME
+# For SQLite (default dev): no DB vars needed
 
 # Authentication
 AUTH_SECRET=your_auth_secret
