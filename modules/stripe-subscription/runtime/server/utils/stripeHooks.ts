@@ -1,32 +1,27 @@
 import { and, eq } from 'drizzle-orm'
 import { users } from '~~/server/db/schemas/auth-schema'
 import { subscriptions } from '~~/server/db/schemas/subscription'
-import { STRIPE_LOOKUP_TO_PLAN, DEFAULT_PLAN } from '../../shared/plans'
+import { STRIPE_LOOKUP_TO_PLAN, DEFAULT_PLAN } from '../../plans'
 import type { H3Event, EventHandlerRequest } from 'h3'
+import { useDB } from '~~/server/utils/useDB'
 
 function extractPlanFromStripe(stripeData: any): string {
   try {
-    // Try to get plan from lookup_key first
     if (stripeData.items?.data?.[0]?.price?.lookup_key) {
       const lookupKey = stripeData.items.data[0].price.lookup_key
       if (STRIPE_LOOKUP_TO_PLAN[lookupKey]) {
         return STRIPE_LOOKUP_TO_PLAN[lookupKey]
       }
     }
-
-    // Fallback to metadata or other fields
     if (stripeData.metadata?.plan && STRIPE_LOOKUP_TO_PLAN[stripeData.metadata.plan]) {
       return STRIPE_LOOKUP_TO_PLAN[stripeData.metadata.plan]
     }
-
-    // Final fallback
     return DEFAULT_PLAN
   } catch {
     return DEFAULT_PLAN
   }
 }
 
-// Helper function to extract period end from Stripe data
 function extractPeriodEndFromStripe(stripeData: any): Date | null {
   try {
     if (stripeData.current_period_end) {
@@ -87,8 +82,6 @@ export async function onInvoicePaymentSucceeded(invoice: any) {
 export async function onCustomerSubscriptionDeleted(event: any) {
   const subscription = event.data.object
   const stripeSubscriptionId = subscription.id
-
-  console.log('subscription canceled')
   await useDB().update(subscriptions)
     .set({ status: 'canceled' })
     .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
@@ -100,10 +93,7 @@ export async function onCustomerSubscriptionUpdated(event: any) {
   const plan = extractPlanFromStripe(subscription)
   const periodEnd = extractPeriodEndFromStripe(subscription)
 
-  const updateData: any = {
-    plan: plan
-  }
-
+  const updateData: any = { plan }
   if (periodEnd) {
     updateData.periodEnd = periodEnd
   }
@@ -116,15 +106,13 @@ export async function updateUserSessionSubFromCustomerId(event: H3Event<EventHan
   const user = await useDB().query.users.findFirst({
     where: eq(users.stripeCustomerId, customerId)
   })
-
   if (!user) {
     console.error('User not found for Stripe customer ID:', customerId)
     return
   }
-
-  console.log('Update the user session')
   const session = await getUserSession(event)
-  console.log(session)
+  // session subscription update could be implemented here
+  return session
 }
 
 export const stripeHooks = {

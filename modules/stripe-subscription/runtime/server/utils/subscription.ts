@@ -1,24 +1,3 @@
-// server/utils/subscription.ts
-import { eq, and, gt, sql } from 'drizzle-orm'
-import { subscriptions } from '../db/schemas/subscription'
-import { users } from '../db/schemas/auth-schema'
-import type { SubscriptionPlan } from '~/shared/plans'
-import { DEFAULT_PLAN, getEntitlements } from '~/shared/plans'
-
-export interface NormalizedSubscription {
-  isActive: boolean
-  plan: SubscriptionPlan
-  status: string
-  periodEnd: Date | null
-  trialEnd: Date | null
-  cancelAtPeriodEnd: boolean
-  seats: number | null
-}
-
-export interface SubscriptionWithEntitlements extends NormalizedSubscription {
-  entitlements: ReturnType<typeof getEntitlements>
-}
-
 /**
  * Get active subscription for a user from database
  */
@@ -37,8 +16,8 @@ export async function getActiveSubscriptionForUser(userId: string) {
 }
 
 /**
- * Normalize subscription data for session
- */
+   * Normalize subscription data for session
+   */
 export function normalizeSubscription(dbSubscription: any): NormalizedSubscription {
   if (!dbSubscription) {
     return {
@@ -67,8 +46,8 @@ export function normalizeSubscription(dbSubscription: any): NormalizedSubscripti
 }
 
 /**
- * Check if subscription is active based on status and dates
- */
+   * Check if subscription is active based on status and dates
+   */
 export function isSubscriptionActive(subscription: any, now: Date = new Date()): boolean {
   if (!subscription) return false
 
@@ -96,15 +75,15 @@ export function isSubscriptionActive(subscription: any, now: Date = new Date()):
 }
 
 /**
- * Get entitlements for a plan
- */
+   * Get entitlements for a plan
+   */
 export function getSubscriptionEntitlements(plan: SubscriptionPlan) {
   return getEntitlements(plan)
 }
 
 /**
- * Get full subscription with entitlements for session
- */
+   * Get full subscription with entitlements for session
+   */
 export function getSubscriptionWithEntitlements(dbSubscription: any): SubscriptionWithEntitlements {
   const normalized = normalizeSubscription(dbSubscription)
   return {

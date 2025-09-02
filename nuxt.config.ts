@@ -9,16 +9,12 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/seo',
     'nuxt-security',
-    '@unlok-co/nuxt-stripe'
+    '@unlok-co/nuxt-stripe',
+    // Local module to centralize Stripe subscription logic
+    './modules/stripe-subscription'
   ],
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  content: {
-    database: {
-      type: 'sqlite',
-      filename: './server/db/data.db'
-    }
-  },
 
   // Nuxt Site Config (via @nuxtjs/seo)
   site: {
@@ -27,20 +23,10 @@ export default defineNuxtConfig({
     description: 'Modern SaaS starter built with Nuxt UI Pro.',
     indexable: isProd
   },
-
-  // Nuxt Sitemap (enabled by @nuxtjs/seo) — rely on sensible defaults
-  sitemap: {
-    exclude: [
-      '/dashboard/**',
-      'subscription/cancel',
-      'subscription/success',
-      /* 'subscription/pay', */
-    ],
-  },
-  // In non-production, prevent indexing via route rules
-  routeRules: isProd ? {} : {
-    '/**': {
-      robots: { index: false, follow: false }
+  content: {
+    database: {
+      type: 'sqlite',
+      filename: './server/db/data.db'
     }
   },
 
@@ -54,16 +40,24 @@ export default defineNuxtConfig({
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET_KEY,
     stripe: {
       key: process.env.STRIPE_SECRET_KEY,
-      options: {},
+      options: {}
     },
     // Client
     public: {
       stripe: {
         key: process.env.STRIPE_PUBLIC_KEY,
-        options: {},
-      },
-    },
+        options: {}
+      }
+    }
   },
+  // In non-production, prevent indexing via route rules
+  routeRules: isProd
+    ? {}
+    : {
+        '/**': {
+          robots: { index: false, follow: false }
+        }
+      },
   future: {
     compatibilityVersion: 4
   },
@@ -80,13 +74,21 @@ export default defineNuxtConfig({
       crawlLinks: true
     }
   },
+  eslint: {
+    config: {
+      stylistic: {
+        commaDangle: 'never',
+        braceStyle: '1tbs'
+      }
+    }
+  },
   security: {
     ssg: {
       hashScripts: false // Disable hashes because they would cancel 'unsafe-inline'
     },
     headers: {
       contentSecurityPolicy: {
-        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+        'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'']
       }
     }
     /*  csrf: true,
@@ -104,12 +106,14 @@ export default defineNuxtConfig({
       'upgrade-insecure-requests': true
     } */
   },
-  eslint: {
-    config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
+
+  // Nuxt Sitemap (enabled by @nuxtjs/seo) — rely on sensible defaults
+  sitemap: {
+    exclude: [
+      '/dashboard/**',
+      'subscription/cancel',
+      'subscription/success'
+      /* 'subscription/pay', */
+    ]
   }
 })

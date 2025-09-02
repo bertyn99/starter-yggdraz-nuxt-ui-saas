@@ -118,4 +118,4 @@ export function getEntitlements(plan: SubscriptionPlan) {
 }
 
 // Re-export types from existing stripe types
-export type { SubscriptionPlan as StripeSubscriptionPlan } from './types/stripe'
+export type { SubscriptionPlan as StripeSubscriptionPlan } from './types'

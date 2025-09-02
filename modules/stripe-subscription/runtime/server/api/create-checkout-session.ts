@@ -1,15 +1,15 @@
+import { defineEventHandler, readBody, createError, getRequestURL } from 'h3'
 import { useServerStripe } from '#stripe/server'
+import { eq } from 'drizzle-orm'
 import { subscriptions } from '~~/server/db/schemas/subscription'
 import { users } from '~~/server/db/schemas/auth-schema'
-import { STRIPE_LOOKUP_TO_PLAN } from '#/shared/types/stripe'
+import { STRIPE_LOOKUP_TO_PLAN } from '../../plans'
 
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
     const { lookup_key } = body
     const stripe = await useServerStripe(event)
-
-    console.log('Creating checkout session for lookup_key:', lookup_key)
 
     // Get authenticated user
     const { user } = await requireUserSession(event)
@@ -23,10 +23,7 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 404, statusMessage: 'User not found' })
     }
 
-    // Get or create Stripe Customer ID (you'll need to implement this function)
-    // For now, we'll assume the user has a stripeCustomerId
     const stripeCustomerId = userFromDB.stripeCustomerId
-
     if (!stripeCustomerId) {
       throw createError({
         statusCode: 400,
@@ -36,8 +33,8 @@ export default defineEventHandler(async (event) => {
 
     const host = getRequestURL(event).origin || 'http://localhost:3000'
 
-    // Check if user already has a subscription (optional - for UI feedback)
-    const _existingSubscription = await useDB().query.subscriptions.findFirst({
+    // Optional: check existing subscription for UI or logic
+    await useDB().query.subscriptions.findFirst({
       where: eq(subscriptions.referenceId, user.id)
     })
 

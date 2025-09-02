@@ -1,6 +1,6 @@
 import { sessionService } from '../utils/session'
-import { getActiveSubscriptionForUser, getSubscriptionWithEntitlements } from '../utils/subscription'
-
+/* import { getActiveSubscriptionForUser, getSubscriptionWithEntitlements } from '../utils/subscription'
+ */
 export default defineNitroPlugin(() => {
   // Called when the session is fetched during SSR for the Vue composable (/api/_auth/session)
   // Or when we call useUserSession().fetch()
@@ -36,10 +36,10 @@ export default defineNitroPlugin(() => {
           }
 
       // Load subscription data for the user
-      let subscriptionData = null
+      const subscriptionData = null
       if (validatedSession.user?.id) {
-        const dbSubscription = await getActiveSubscriptionForUser(validatedSession.user.id)
-        subscriptionData = getSubscriptionWithEntitlements(dbSubscription)
+        /*  const dbSubscription = await getActiveSubscriptionForUser(validatedSession.user.id)
+        subscriptionData = getSubscriptionWithEntitlements(dbSubscription) */
       }
 
       return {

@@ -1,7 +1,7 @@
 // server/utils/entitlements.ts
 import type { H3Event } from 'h3'
-import type { SubscriptionPlan } from '~/shared/plans'
-import { isAtLeast } from '~/shared/plans'
+import type { SubscriptionPlan } from '../../plans'
+import { isAtLeast } from '../../plans'
 
 interface PlanRequirement {
   atLeast?: SubscriptionPlan
