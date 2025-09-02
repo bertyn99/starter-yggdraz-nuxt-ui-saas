@@ -1,4 +1,4 @@
-import { defineNuxtModule, addServerHandler, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addServerHandler, createResolver, addImportsDir, installModule } from '@nuxt/kit'
 
 export interface ModuleOptions {
   /**
@@ -15,9 +15,16 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: {
     routeBase: '/api/stripe'
   },
-  setup(options, nuxt) {
+  async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
+    await installModule('@unlok-co/nuxt-stripe', {
+      // module configuration
+      exposeConfig: true
+    })
+
+    // Auto-import composables from this module
+    addImportsDir(resolve('./runtime/composable'))
     // Webhook endpoint
     addServerHandler({
       route: `${options.routeBase}/webhook`,

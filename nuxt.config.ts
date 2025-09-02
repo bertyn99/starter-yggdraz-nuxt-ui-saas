@@ -9,7 +9,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/seo',
     'nuxt-security',
-    '@unlok-co/nuxt-stripe',
     // Local module to centralize Stripe subscription logic
     './modules/stripe-subscription'
   ],
