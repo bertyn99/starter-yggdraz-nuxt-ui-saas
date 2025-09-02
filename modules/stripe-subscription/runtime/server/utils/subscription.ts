@@ -1,3 +1,19 @@
+import { subscriptions } from '#server/db/schemas'
+import { useDB } from '#server/db'
+import { eq } from 'drizzle-orm'
+import { DEFAULT_PLAN } from '../../plans'
+import type { SubscriptionPlan } from '../../plans'
+
+interface NormalizedSubscription {
+  isActive: boolean
+  plan: SubscriptionPlan
+  status: string
+  periodEnd: Date | null
+  trialEnd: Date | null
+  cancelAtPeriodEnd: boolean
+  seats: number | null
+}
+
 /**
  * Get active subscription for a user from database
  */

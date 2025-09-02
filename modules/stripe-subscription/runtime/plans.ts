@@ -4,20 +4,24 @@ export type SubscriptionPlan = 'free' | 'plus' | 'pro' | 'enterprise'
 export const PLAN_ORDER: SubscriptionPlan[] = ['free', 'plus', 'pro', 'enterprise']
 
 export const PLAN_CONFIG: Record<SubscriptionPlan, {
-  features: Record<string, boolean>
+  features: { title: string, value: boolean, icon?: string }[]
   limits: Record<string, number>
 }> = {
   free: {
-    features: {
-      basicAnalytics: true,
-      basicSupport: true,
-      apiAccess: false,
-      teamCollaboration: false,
-      advancedSecurity: false,
-      customBranding: false,
-      prioritySupport: false,
-      sso: false
-    },
+    features: [
+      {
+        title: 'Basic Analytics',
+        value: true
+      },
+      {
+        title: 'Basic Support',
+        value: true
+      },
+      {
+        title: 'API Access',
+        value: false
+      }
+    ],
     limits: {
       projects: 3,
       teamMembers: 1,
@@ -27,16 +31,40 @@ export const PLAN_CONFIG: Record<SubscriptionPlan, {
     }
   },
   plus: {
-    features: {
-      basicAnalytics: true,
-      basicSupport: true,
-      apiAccess: true,
-      teamCollaboration: false,
-      advancedSecurity: false,
-      customBranding: false,
-      prioritySupport: false,
-      sso: false
-    },
+    features: [
+      {
+        title: 'Basic Analytics',
+        value: true
+      },
+      {
+        title: 'Basic Support',
+        value: true
+      },
+      {
+        title: 'API Access',
+        value: true
+      },
+      {
+        title: 'Team Collaboration',
+        value: false
+      },
+      {
+        title: 'Advanced Security',
+        value: false
+      },
+      {
+        title: 'Custom Branding',
+        value: false
+      },
+      {
+        title: 'Priority Support',
+        value: false
+      },
+      {
+        title: 'Single Sign-On (SSO)',
+        value: false
+      }
+    ],
     limits: {
       projects: 10,
       teamMembers: 3,
@@ -46,16 +74,40 @@ export const PLAN_CONFIG: Record<SubscriptionPlan, {
     }
   },
   pro: {
-    features: {
-      basicAnalytics: true,
-      basicSupport: true,
-      apiAccess: true,
-      teamCollaboration: true,
-      advancedSecurity: true,
-      customBranding: false,
-      prioritySupport: false,
-      sso: false
-    },
+    features: [
+      {
+        title: 'Basic Analytics',
+        value: true
+      },
+      {
+        title: 'Basic Support',
+        value: true
+      },
+      {
+        title: 'API Access',
+        value: true
+      },
+      {
+        title: 'Team Collaboration',
+        value: true
+      },
+      {
+        title: 'Advanced Security',
+        value: true
+      },
+      {
+        title: 'Custom Branding',
+        value: false
+      },
+      {
+        title: 'Priority Support',
+        value: false
+      },
+      {
+        title: 'Single Sign-On (SSO)',
+        value: false
+      }
+    ],
     limits: {
       projects: 50,
       teamMembers: 10,
@@ -65,16 +117,40 @@ export const PLAN_CONFIG: Record<SubscriptionPlan, {
     }
   },
   enterprise: {
-    features: {
-      basicAnalytics: true,
-      basicSupport: true,
-      apiAccess: true,
-      teamCollaboration: true,
-      advancedSecurity: true,
-      customBranding: true,
-      prioritySupport: true,
-      sso: true
-    },
+    features: [
+      {
+        title: 'Basic Analytics',
+        value: true
+      },
+      {
+        title: 'Basic Support',
+        value: true
+      },
+      {
+        title: 'API Access',
+        value: true
+      },
+      {
+        title: 'Team Collaboration',
+        value: true
+      },
+      {
+        title: 'Advanced Security',
+        value: true
+      },
+      {
+        title: 'Custom Branding',
+        value: true
+      },
+      {
+        title: 'Priority Support',
+        value: true
+      },
+      {
+        title: 'Single Sign-On (SSO)',
+        value: true
+      }
+    ],
     limits: {
       projects: -1, // unlimited
       teamMembers: -1, // unlimited
@@ -85,8 +161,22 @@ export const PLAN_CONFIG: Record<SubscriptionPlan, {
   }
 }
 
+// Utility function to generate Stripe lookup keys programmatically
+export function generateStripeLookupKey(planId: string, billingCycle: 'monthly' | 'yearly'): string {
+  return `${planId}_${billingCycle}`
+}
+
 // Maps Stripe price lookup_key to internal plan names
 export const STRIPE_LOOKUP_TO_PLAN: Record<string, SubscriptionPlan> = {
+  // Monthly plans
+  plus_monthly: 'plus',
+  pro_monthly: 'pro',
+  enterprise_monthly: 'enterprise',
+  // Yearly plans
+  plus_yearly: 'plus',
+  pro_yearly: 'pro',
+  enterprise_yearly: 'enterprise',
+  // Legacy keys (for backward compatibility)
   plus: 'plus',
   pro: 'pro',
   enterprise: 'enterprise'
@@ -110,7 +200,7 @@ export function limitFor(plan: SubscriptionPlan, key: string): number {
 }
 
 export function hasFeature(plan: SubscriptionPlan, feature: string): boolean {
-  return PLAN_CONFIG[plan]?.features[feature] ?? false
+  return PLAN_CONFIG[plan]?.features.find(f => f.title === feature)?.value ?? false
 }
 
 export function getEntitlements(plan: SubscriptionPlan) {

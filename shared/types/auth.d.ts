@@ -42,8 +42,6 @@ export interface AuthState {
   error: string | null
 }
 
-
-
 // Auth utilities module augmentation
 declare module '#auth-utils' {
   interface User {
@@ -59,6 +57,7 @@ declare module '#auth-utils' {
       ipAddress?: string
       userAgent?: string
     }
+    subscription?: SubscriptionWithEntitlements
   }
 
   interface SecureSessionData {
