@@ -1,21 +1,22 @@
 import { and, eq } from 'drizzle-orm'
 import { users } from '~~/server/db/schemas/auth-schema'
 import { subscriptions } from '~~/server/db/schemas/subscription'
+import { STRIPE_LOOKUP_TO_PLAN, DEFAULT_PLAN } from '../../shared/plans'
 import type { H3Event, EventHandlerRequest } from 'h3'
 
-function extractPlanFromStripe(stripeData: any): SubscriptionPlan {
+function extractPlanFromStripe(stripeData: any): string {
   try {
     // Try to get plan from lookup_key first
     if (stripeData.items?.data?.[0]?.price?.lookup_key) {
       const lookupKey = stripeData.items.data[0].price.lookup_key
-      if (PLAN_MAPPING[lookupKey]) {
-        return PLAN_MAPPING[lookupKey]
+      if (STRIPE_LOOKUP_TO_PLAN[lookupKey]) {
+        return STRIPE_LOOKUP_TO_PLAN[lookupKey]
       }
     }
 
     // Fallback to metadata or other fields
-    if (stripeData.metadata?.plan && PLAN_MAPPING[stripeData.metadata.plan]) {
-      return PLAN_MAPPING[stripeData.metadata.plan]
+    if (stripeData.metadata?.plan && STRIPE_LOOKUP_TO_PLAN[stripeData.metadata.plan]) {
+      return STRIPE_LOOKUP_TO_PLAN[stripeData.metadata.plan]
     }
 
     // Final fallback
@@ -44,6 +45,7 @@ export async function onCheckoutSessionCompleted(session: any) {
   const stripeCustomerId = session.customer
   const stripeSubscriptionId = session.subscription
   const periodEnd = extractPeriodEndFromStripe(session)
+  const plan = extractPlanFromStripe(session)
 
   const user = await useDB().query.users.findFirst({
     where: eq(users.stripeCustomerId, stripeCustomerId)
@@ -58,14 +60,14 @@ export async function onCheckoutSessionCompleted(session: any) {
     referenceId: user.id,
     stripeCustomerId: stripeCustomerId,
     stripeSubscriptionId: stripeSubscriptionId,
-    plan: 'student',
+    plan: plan,
     status: 'active',
     periodEnd: periodEnd
   }).onConflictDoUpdate({
     target: subscriptions.referenceId,
     set: {
       stripeSubscriptionId,
-      plan: 'student',
+      plan: plan,
       status: 'active',
       periodEnd: periodEnd
     }
@@ -95,11 +97,11 @@ export async function onCustomerSubscriptionDeleted(event: any) {
 export async function onCustomerSubscriptionUpdated(event: any) {
   const subscription = event.data.object
   const stripeSubscriptionId = subscription.id
-  const plan = subscription.items.data[0].price.lookup_key
+  const plan = extractPlanFromStripe(subscription)
   const periodEnd = extractPeriodEndFromStripe(subscription)
 
   const updateData: any = {
-    plan
+    plan: plan
   }
 
   if (periodEnd) {
