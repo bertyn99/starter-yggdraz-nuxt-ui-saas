@@ -15,7 +15,7 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: {
     routeBase: '/api/stripe'
   },
-  setup(options) {
+  setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
     // Webhook endpoint
@@ -42,6 +42,25 @@ export default defineNuxtModule<ModuleOptions>({
     addServerHandler({
       route: `${options.routeBase}/subscription`,
       handler: resolve('./runtime/server/api/subscription')
+    })
+
+    // get subsrcription example page
+    nuxt.hook('pages:extend', (pages) => {
+      pages.push({
+        name: 'dashboard-subscription',
+        path: '/dashboard/subscription',
+        file: resolve(__dirname, './runtime/pages/example-subscription.vue')
+      })
+      pages.push({
+        name: 'dashboard-subscription-success',
+        path: '/dashboard/subscription/success',
+        file: resolve(__dirname, './runtime/pages/subscription/success.vue')
+      })
+      pages.push({
+        name: 'dashboard-subscription-error',
+        path: '/dashboard/subscription/error',
+        file: resolve(__dirname, './runtime/pages/subscription/cancel.vue')
+      })
     })
   }
 })
