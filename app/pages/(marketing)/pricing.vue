@@ -3,6 +3,7 @@ const { data: page } = await useAsyncData('pricing', () => queryCollection('pric
 
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
+const { isYearly, items, plans } = useSubscription()
 
 useSeoMeta({
   title,
@@ -12,19 +13,6 @@ useSeoMeta({
 })
 
 defineOgImageComponent('Saas')
-
-const isYearly = ref('0')
-
-const items = ref([
-  {
-    label: 'Monthly',
-    value: '0'
-  },
-  {
-    label: 'Yearly',
-    value: '1'
-  }
-])
 </script>
 
 <template>
@@ -55,8 +43,9 @@ const items = ref([
           v-for="(plan, index) in page.plans"
           :key="index"
           v-bind="plan"
-          :price="isYearly === '1' ? plan.price.year : plan.price.month"
+          :price="isYearly === '1' ? plan.price.yearly : plan.price.monthly"
           :billing-cycle="isYearly === '1' ? '/year' : '/month'"
+          :button="plan.button"
         />
       </UPricingPlans>
     </UContainer>
