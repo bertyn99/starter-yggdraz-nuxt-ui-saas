@@ -4,21 +4,18 @@ const route = useRoute()
 const { data: page } = await useAsyncData('blog', () => queryCollection('blog').first())
 const { data: posts } = await useAsyncData(route.path, () => queryCollection('posts').all())
 
-const title = page.value?.seo?.title || page.value?.title
-const description = page.value?.seo?.description || page.value?.description
+const title = computed(() => page.value?.seo?.title || page.value?.title)
+const description = computed(() => page.value?.seo?.description || page.value?.description)
 
 useSeoMeta({
   title,
-  ogTitle: title,
+  ogTitle: () => title.value,
   description,
-  ogDescription: description
+  ogDescription: () => description.value
 })
 
 defineOgImageComponent('Saas')
 
-definePageMeta({
-  title
-})
 
 
 useHead((page.value as any)?.head || {})

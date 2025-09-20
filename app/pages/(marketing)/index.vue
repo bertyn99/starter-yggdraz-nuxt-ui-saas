@@ -1,20 +1,17 @@
 <script setup lang="ts">
 const { data: page } = await useAsyncData('index', () => queryCollection('index').first())
 
-const title = page.value?.seo?.title || page.value?.title
-const description = page.value?.seo?.description || page.value?.description
+const title = computed(() => page.value?.seo?.title || page.value?.title)
+const description = computed(() => page.value?.seo?.description || page.value?.description)
 
 useSeoMeta({
-  titleTemplate: '',
   title,
-  ogTitle: title,
+  ogTitle: () => title.value,
   description,
-  ogDescription: description
+  ogDescription: () => description.value
 })
 
-definePageMeta({
-  title
-})
+
 </script>
 
 <template>

@@ -12,19 +12,19 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
   })
 })
 
-const title = post.value.seo?.title || post.value.title
-const description = post.value.seo?.description || post.value.description
+const title = computed(() => post.value.seo?.title || post.value.title)
+const description = computed(() => post.value.seo?.description || post.value.description)
 
 useSeoMeta({
   title,
-  ogTitle: title,
+  ogTitle: () => title.value,
   description,
-  ogDescription: description
+  ogDescription: () => description.value
 })
 
 if (post.value.image?.src) {
   defineOgImage({
-    url: post.value.image.src
+    url: post.value?.image?.src
   })
 } else {
   defineOgImageComponent('Saas', {
@@ -32,9 +32,6 @@ if (post.value.image?.src) {
   })
 }
 
-definePageMeta({
-  title
-})
 
 useHead((post.value as any)?.head || {})
 </script>

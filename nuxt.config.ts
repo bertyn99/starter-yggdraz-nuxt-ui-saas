@@ -1,3 +1,6 @@
+import { defineOrganization } from 'nuxt-schema-org/schema'
+
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const isProd = process.env.NODE_ENV === 'production'
 export default defineNuxtConfig({
