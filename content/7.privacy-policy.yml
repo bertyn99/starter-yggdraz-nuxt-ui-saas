@@ -11,7 +11,7 @@ sections:
     content: |
       This Privacy Policy describes how we collect, use, and protect your personal information when you use our platform and services. We are committed to protecting your privacy and ensuring the security of your personal data.
       
-      By using our services, you agree to the collection and use of information in accordance with this policy. If you have any questions about this Privacy Policy, please contact us at privacy@company.com.
+      By using our services, you agree to the collection and use of information in accordance with this policy. If you have any questions about this Privacy Policy, please contact us at privacy@acme.com.
   
   - title: Information We Collect
     content: |
@@ -222,12 +222,12 @@ sections:
       If you have questions about this Privacy Policy or our data practices:
       
       **Privacy Team:**
-      - Email: privacy@company.com
+      - Email: privacy@acme.com
       - Phone: +1 (415) 555-0123
       - Address: 123 Innovation Drive, San Francisco, CA 94105
       
       **Data Protection Officer:**
-      - Email: dpo@company.com
+      - Email: dpo@acme.com
       - Dedicated privacy support line
       - EU representative contact information
       

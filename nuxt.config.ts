@@ -21,8 +21,8 @@ export default defineNuxtConfig({
   // Nuxt Site Config (via @nuxtjs/seo)
   site: {
     url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-    name: 'Yggdraz SaaS Starter',
-    description: 'Modern SaaS starter built with Nuxt UI Pro.',
+    name: 'Acme',
+    description: 'Modern SaaS platform built with cutting-edge technology.',
     indexable: isProd
   },
   content: {
@@ -66,8 +66,8 @@ export default defineNuxtConfig({
   schemaOrg: {
     identity: defineOrganization({
       // Basic Information
-      name: 'TechCorp Solutions',
-      logo: '/logo.png',
+      name: 'Acme',
+      logo: '/Acme logo.svg',
     })
   },
   compatibilityDate: '2024-10-17',

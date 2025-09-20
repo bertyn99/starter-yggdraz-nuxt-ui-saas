@@ -1,6 +1,6 @@
-# 🚀 Nuxt UI SaaS Starter Template
+# 🚀 Acme SaaS Platform
 
-A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **Nuxt UI Pro**, and modern web technologies. This template provides everything you need to build and deploy a professional SaaS application.
+A production-ready, feature-rich SaaS platform built with **Nuxt 4**, **Nuxt UI Pro**, and modern web technologies. This platform provides everything you need to build and deploy a professional SaaS application.
 
 ![Nuxt](https://img.shields.io/badge/Nuxt-4.0.3-00DC82?style=for-the-badge&logo=nuxt.js)
 ![Vue](https://img.shields.io/badge/Vue-3.4+-4FC08D?style=for-the-badge&logo=vue.js)
@@ -140,7 +140,7 @@ A production-ready, feature-rich SaaS starter template built with **Nuxt 4**, **
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd starter-yggdraz-nuxt-ui-saas
+cd acme-saas-platform
 
 # Install dependencies
 pnpm install

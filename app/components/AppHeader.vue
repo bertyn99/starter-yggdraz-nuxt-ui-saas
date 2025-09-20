@@ -29,7 +29,7 @@ const items = computed(() => [
 const userMenuItems = ref<DropdownMenuItem[][]>([
   [
     {
-      label: 'Benjamin',
+      label: 'Acme User',
       avatar: {
         src: 'https://github.com/benjamincanac.png'
       },
@@ -109,8 +109,21 @@ const userMenuItems = ref<DropdownMenuItem[][]>([
 <template>
   <UHeader>
     <template #left>
-      <NuxtLink to="/">
-        <LogoPro class="w-auto h-6 shrink-0" />
+      <NuxtLink to="/" class="flex items-center gap-1 hover:opacity-80 transition-opacity">
+        <svg width="32" height="28" viewBox="0 0 46 40" class="w-6 h-8 text-primary dark:text-primary" fill="none"
+          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path
+            d="M0 33L4.60606 25H12.2448C17.2569 25 21.4947 28.7103 22.1571 33.6784L23 40H13L11.5585 36.6365C10.613 34.4304 8.44379 33 6.04362 33H0Z"
+            fill="currentColor"></path>
+          <path
+            d="M46 33L41.3939 25H33.7552C28.7431 25 24.5053 28.7103 23.8429 33.6784L23 40H33L34.4415 36.6365C35.387 34.4304 37.5562 33 39.9564 33H46Z"
+            fill="currentColor"></path>
+          <path d="M4.60606 25L18.9999 0H23L22.6032 9.52405C22.2608 17.7406 15.7455 24.3596 7.53537 24.8316L4.60606 25Z"
+            fill="currentColor"></path>
+          <path d="M41.3939 25L27.0001 0H23L23.3968 9.52405C23.7392 17.7406 30.2545 24.3596 38.4646 24.8316L41.3939 25Z"
+            fill="currentColor"></path>
+        </svg>
+        <span class="text-xl font-semibold text-gray-900 dark:text-white">cme</span>
       </NuxtLink>
       <TemplateMenu />
     </template>

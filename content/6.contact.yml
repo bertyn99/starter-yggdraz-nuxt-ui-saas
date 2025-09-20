@@ -10,7 +10,7 @@ hero:
   links:
     - label: Schedule a Demo
       icon: i-lucide-calendar
-      to: mailto:sales@company.com?subject=Demo%20Request
+      to: mailto:sales@acme.com?subject=Demo%20Request
       variant: solid
       size: lg
 contact_info:
@@ -20,22 +20,22 @@ contact_info:
     - title: General Inquiries
       description: For general questions and information
       icon: i-lucide-mail
-      contact: hello@company.com
+      contact: hello@acme.com
       response_time: "Within 24 hours"
     - title: Technical Support
       description: For technical issues and help
       icon: i-lucide-life-buoy
-      contact: support@company.com
+      contact: support@acme.com
       response_time: "Within 4 hours"
     - title: Sales & Partnerships
       description: For sales inquiries and partnerships
       icon: i-lucide-handshake
-      contact: sales@company.com
+      contact: sales@acme.com
       response_time: "Within 2 hours"
     - title: Enterprise Support
       description: For enterprise customers
       icon: i-lucide-building-2
-      contact: enterprise@company.com
+      contact: enterprise@acme.com
       response_time: "Within 1 hour"
 office_locations:
   title: Our Offices
@@ -61,20 +61,20 @@ social_media:
   description: Stay connected and get the latest updates
   platforms:
     - name: Twitter
-      handle: "@company"
-      url: "https://twitter.com/company"
+      handle: "@acme"
+      url: "https://twitter.com/acme"
       icon: i-simple-icons-twitter
     - name: LinkedIn
-      handle: "company"
-      url: "https://linkedin.com/company/company"
+      handle: "acme"
+      url: "https://linkedin.com/company/acme"
       icon: i-simple-icons-linkedin
     - name: GitHub
-      handle: "company"
-      url: "https://github.com/company"
+      handle: "acme"
+      url: "https://github.com/acme"
       icon: i-simple-icons-github
     - name: YouTube
-      handle: "Company Channel"
-      url: "https://youtube.com/@company"
+      handle: "Acme Channel"
+      url: "https://youtube.com/@acme"
       icon: i-simple-icons-youtube
 faq_preview:
   title: Quick Answers

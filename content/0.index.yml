@@ -1,8 +1,8 @@
-title: Build your SaaS with Nuxt UI Pro
-description: Nuxt UI Pro is a collection of premium Vue components built on top of Nuxt UI to create beautiful & responsive Nuxt applications in minutes. It includes all primitives to build landing pages, documentations, blogs, dashboards or entire SaaS products.
+title: Build your platform with Acme
+description: Acme is a modern SaaS platform built with cutting-edge technology to help you scale your business efficiently and effectively.
 seo:
-  title: Nuxt SaaS template
-  description: Nuxt UI Pro is a collection of premium Vue components built on top of Nuxt UI to create beautiful & responsive Nuxt applications in minutes.
+  title: Acme platform
+  description: Acme is a modern SaaS platform built with cutting-edge technology to help you scale your business efficiently and effectively.
 navigation: false
 hero:
   links:
