@@ -3,7 +3,8 @@ import { signupSchema, type SignupSchema } from '#shared/schemas/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  title: 'Sign up'
 })
 
 useSeoMeta({
@@ -86,34 +87,16 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UAuthForm
-    :fields="fields"
-    :schema="signupSchema"
-    :providers="providers"
-    title="Create an account"
-    :submit="{ label: 'Create account' }"
-    @submit="onSubmit"
-  >
+  <UAuthForm :fields="fields" :schema="signupSchema" :providers="providers" title="Create an account"
+    :submit="{ label: 'Create account' }" @submit="onSubmit">
     <template #description>
-      Already have an account? <ULink
-        to="/login"
-        class="text-primary font-medium"
-      >Login</ULink>.
+      Already have an account? <ULink to="/login" class="text-primary font-medium">Login</ULink>.
     </template>
     <template #validation>
-      <UAlert
-        v-if="error"
-        variant="subtle"
-        color="error"
-        icon="i-lucide-info"
-        :title="error"
-      />
+      <UAlert v-if="error" variant="subtle" color="error" icon="i-lucide-info" :title="error" />
     </template>
     <template #footer>
-      By signing up, you agree to our <ULink
-        to="/"
-        class="text-primary font-medium"
-      >Terms of Service</ULink>.
+      By signing up, you agree to our <ULink to="/" class="text-primary font-medium">Terms of Service</ULink>.
     </template>
 
 

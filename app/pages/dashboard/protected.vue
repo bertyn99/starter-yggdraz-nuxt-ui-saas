@@ -13,7 +13,8 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'auth',
+  title: 'Dashboard'
 })
 // You can include authentication checks or fetch protected data here if necessary.
 </script>

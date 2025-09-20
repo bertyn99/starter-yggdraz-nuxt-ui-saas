@@ -53,12 +53,19 @@ export default defineNuxtConfig({
   routeRules: isProd
     ? {}
     : {
-        '/**': {
-          robots: { index: false, follow: false }
-        }
-      },
+      '/**': {
+        robots: { index: false, follow: false }
+      }
+    },
   future: {
     compatibilityVersion: 4
+  },
+  schemaOrg: {
+    identity: defineOrganization({
+      // Basic Information
+      name: 'TechCorp Solutions',
+      logo: '/logo.png',
+    })
   },
   compatibilityDate: '2024-10-17',
   nitro: {

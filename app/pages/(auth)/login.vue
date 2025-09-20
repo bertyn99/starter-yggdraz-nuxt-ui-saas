@@ -3,7 +3,8 @@ import { loginSchema, type LoginSchema } from '#shared/schemas/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  title: 'Login'
 })
 
 useSeoMeta({
@@ -62,43 +63,21 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UAuthForm
-    :fields="fields"
-    :schema="loginSchema"
-    :providers="providers"
-    title="Welcome back"
-    icon="i-lucide-lock"
-    @submit="onSubmit"
-  >
+  <UAuthForm :fields="fields" :schema="loginSchema" :providers="providers" title="Welcome back" icon="i-lucide-lock"
+    @submit="onSubmit">
     <template #description>
-      Don't have an account? <ULink
-        to="/register"
-        class="text-primary font-medium"
-      >Sign up</ULink>.
+      Don't have an account? <ULink to="/register" class="text-primary font-medium">Sign up</ULink>.
     </template>
 
     <template #password-hint>
-      <ULink
-        to="/forgot-password"
-        class="text-primary font-medium"
-        tabindex="-1"
-      >Forgot password?</ULink>
+      <ULink to="/forgot-password" class="text-primary font-medium" tabindex="-1">Forgot password?</ULink>
     </template>
 
     <template #footer>
-      By signing in, you agree to our <ULink
-        to="/"
-        class="text-primary font-medium"
-      >Terms of Service</ULink>.
+      By signing in, you agree to our <ULink to="/" class="text-primary font-medium">Terms of Service</ULink>.
     </template>
     <template #validation>
-      <UAlert
-        v-if="error"
-        variant="subtle"
-        color="error"
-        icon="i-lucide-info"
-        :title="error.message"
-      />
+      <UAlert v-if="error" variant="subtle" color="error" icon="i-lucide-info" :title="error.message" />
     </template>
   </UAuthForm>
 </template>

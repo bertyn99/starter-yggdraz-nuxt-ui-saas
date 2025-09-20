@@ -27,6 +27,7 @@
 definePageMeta({
     middleware: ['auth'], // Ensure only authenticated users can access
     layout: 'default',
+    title: 'Subscription Successful'
 })
 
 const { fetch } = useUserSession()

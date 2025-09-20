@@ -12,6 +12,10 @@ useSeoMeta({
   ogDescription: description
 })
 
+definePageMeta({
+  title
+})
+
 const form = ref({
   name: '',
   email: '',
@@ -25,13 +29,13 @@ const submitSuccess = ref(false)
 
 const handleSubmit = async () => {
   isSubmitting.value = true
-  
+
   // Simulate form submission
   await new Promise(resolve => setTimeout(resolve, 1000))
-  
+
   isSubmitting.value = false
   submitSuccess.value = true
-  
+
   // Reset form
   form.value = {
     name: '',
@@ -40,7 +44,7 @@ const handleSubmit = async () => {
     subject: '',
     message: ''
   }
-  
+
   // Hide success message after 5 seconds
   setTimeout(() => {
     submitSuccess.value = false
@@ -50,11 +54,7 @@ const handleSubmit = async () => {
 
 <template>
   <div v-if="page">
-    <UPageHero
-      :title="page.hero.title"
-      :description="page.hero.description"
-      :links="page.hero.links"
-    />
+    <UPageHero :title="page.hero.title" :description="page.hero.description" :links="page.hero.links" />
 
     <UPageSection>
       <UPageGrid>
@@ -69,18 +69,12 @@ const handleSubmit = async () => {
               <p class="text-gray-600 dark:text-gray-400 mb-6">
                 {{ page.contact_info.description }}
               </p>
-              
+
               <div class="space-y-4">
-                <div
-                  v-for="method in page.contact_info.methods"
-                  :key="method.title"
-                  class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                >
+                <div v-for="method in page.contact_info.methods" :key="method.title"
+                  class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <div class="flex-shrink-0">
-                    <UIcon
-                      :name="method.icon"
-                      class="w-6 h-6 text-primary-500"
-                    />
+                    <UIcon :name="method.icon" class="w-6 h-6 text-primary-500" />
                   </div>
                   <div class="flex-1">
                     <h3 class="font-medium text-gray-900 dark:text-white">
@@ -108,13 +102,10 @@ const handleSubmit = async () => {
               <p class="text-gray-600 dark:text-gray-400 mb-6">
                 {{ page.office_locations.description }}
               </p>
-              
+
               <div class="space-y-4">
-                <div
-                  v-for="location in page.office_locations.locations"
-                  :key="location.city"
-                  class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                >
+                <div v-for="location in page.office_locations.locations" :key="location.city"
+                  class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <h3 class="font-medium text-gray-900 dark:text-white mb-2">
                     {{ location.city }}, {{ location.country }}
                   </h3>
@@ -139,17 +130,11 @@ const handleSubmit = async () => {
               <p class="text-gray-600 dark:text-gray-400 mb-6">
                 {{ page.social_media.description }}
               </p>
-              
+
               <div class="flex space-x-4">
-                <UButton
-                  v-for="platform in page.social_media.platforms"
-                  :key="platform.name"
-                  :to="platform.url"
-                  target="_blank"
-                  variant="ghost"
-                  :icon="platform.icon"
-                  class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400"
-                />
+                <UButton v-for="platform in page.social_media.platforms" :key="platform.name" :to="platform.url"
+                  target="_blank" variant="ghost" :icon="platform.icon"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400" />
               </div>
             </div>
           </div>
@@ -165,75 +150,41 @@ const handleSubmit = async () => {
             <form @submit.prevent="handleSubmit" class="space-y-4">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <UFormGroup label="Name" required>
-                  <UInput
-                    v-model="form.name"
-                    placeholder="Your name"
-                    required
-                  />
+                  <UInput v-model="form.name" placeholder="Your name" required />
                 </UFormGroup>
 
                 <UFormGroup label="Email" required>
-                  <UInput
-                    v-model="form.email"
-                    type="email"
-                    placeholder="your.email@company.com"
-                    required
-                  />
+                  <UInput v-model="form.email" type="email" placeholder="your.email@company.com" required />
                 </UFormGroup>
               </div>
 
               <UFormGroup label="Company">
-                <UInput
-                  v-model="form.company"
-                  placeholder="Your company (optional)"
-                />
+                <UInput v-model="form.company" placeholder="Your company (optional)" />
               </UFormGroup>
 
               <UFormGroup label="Subject" required>
-                <USelect
-                  v-model="form.subject"
-                  :options="[
-                    'General Inquiry',
-                    'Technical Support',
-                    'Sales Question',
-                    'Partnership',
-                    'Feature Request',
-                    'Other'
-                  ]"
-                  placeholder="Select a subject"
-                  required
-                />
+                <USelect v-model="form.subject" :options="[
+                  'General Inquiry',
+                  'Technical Support',
+                  'Sales Question',
+                  'Partnership',
+                  'Feature Request',
+                  'Other'
+                ]" placeholder="Select a subject" required />
               </UFormGroup>
 
               <UFormGroup label="Message" required>
-                <UTextarea
-                  v-model="form.message"
-                  placeholder="Tell us how we can help you..."
-                  rows="5"
-                  required
-                />
+                <UTextarea v-model="form.message" placeholder="Tell us how we can help you..." rows="5" required />
               </UFormGroup>
 
-              <UButton
-                type="submit"
-                :loading="isSubmitting"
-                :disabled="isSubmitting"
-                class="w-full"
-                size="lg"
-              >
+              <UButton type="submit" :loading="isSubmitting" :disabled="isSubmitting" class="w-full" size="lg">
                 {{ isSubmitting ? 'Sending...' : 'Send Message' }}
               </UButton>
             </form>
 
             <!-- Success Message -->
-            <UAlert
-              v-if="submitSuccess"
-              title="Message sent successfully!"
-              description="We'll get back to you as soon as possible."
-              color="green"
-              variant="soft"
-              class="mt-4"
-            />
+            <UAlert v-if="submitSuccess" title="Message sent successfully!"
+              description="We'll get back to you as soon as possible." color="green" variant="soft" class="mt-4" />
           </div>
         </div>
       </UPageGrid>
@@ -248,12 +199,8 @@ const handleSubmit = async () => {
         <p class="text-gray-600 dark:text-gray-400 mb-6">
           {{ page.faq_preview.description }}
         </p>
-        <UButton
-          :to="page.faq_preview.link.to"
-          :icon="page.faq_preview.link.icon"
-          :trailing="page.faq_preview.link.trailing"
-          variant="outline"
-        >
+        <UButton :to="page.faq_preview.link.to" :icon="page.faq_preview.link.icon"
+          :trailing="page.faq_preview.link.trailing" variant="outline">
           {{ page.faq_preview.link.label }}
         </UButton>
       </div>
