@@ -1,9 +1,8 @@
 // server/api/auth/login.post.ts
 import * as argon2 from '@node-rs/argon2'
 import { eq } from 'drizzle-orm'
-import { users, accounts } from '../../db/schemas/auth-schema'
-import { loginSchema } from '../../../shared/schemas/auth'
-import { sessionService } from '../../utils/session'
+import { users, accounts } from '~~/server/db/schemas/auth-schema'
+import { loginSchema } from '#shared/schemas/auth'
 
 export default defineEventHandler(async (event) => {
   try {

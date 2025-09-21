@@ -7,17 +7,19 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/ui-pro',
     '@nuxt/eslint',
-    'nuxt-auth-utils',
     '@nuxt/image',
     '@nuxt/content',
     '@nuxtjs/seo',
     'nuxt-security',
     // Local module to centralize Stripe subscription logic
-    './modules/stripe-subscription'
+    './modules/stripe-subscription',
+
   ],
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-
+  extends: [
+    './layers/auth',
+  ],
   // Nuxt Site Config (via @nuxtjs/seo)
   site: {
     url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
@@ -33,11 +35,13 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    maxAge: 60 * 60 * 24 * 3, // 3 days
-    cookie: {
-      httpOnly: true,
-      secure: true, // work with https
-      sameSite: 'strict'
+    session: {
+      maxAge: 60 * 60 * 24 * 3, // 3 days
+      cookie: {
+        httpOnly: true,
+        secure: true, // work with https
+        sameSite: 'strict'
+      },
     },
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET_KEY,
     stripe: {
@@ -124,5 +128,27 @@ export default defineNuxtConfig({
       'subscription/success'
       /* 'subscription/pay', */
     ]
-  }
+  },
+  /*  authCore: {
+     sessionRules: {
+       expiresIn: 7 * 24 * 60 * 60, // 7 days in seconds
+       updateAge: 24 * 60 * 60, // 1 day in seconds
+       freshAge: 24 * 60 * 60, // 1 day in seconds
+       maxSessions: 10,
+       cleanupInterval: 60 * 60, // 1 hour in seconds
+       trackActivity: true,
+       requireFreshness: false,
+       disableSessionRefresh: false,
+       cookieCache: {
+         enabled: false,
+         maxAge: 5 * 60 // 5 minutes in seconds
+       }
+     },
+     // Database adapter configuration
+     database: {
+       // Use the default 'useDB' function from your app
+       adapterFunction: 'useDB'
+ 
+     }
+   }, */
 })

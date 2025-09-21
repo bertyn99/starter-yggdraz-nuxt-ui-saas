@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/better-sqlite3'
 // import { drizzle } from 'drizzle-orm/d1'
 import { eq, and, or, desc, like } from 'drizzle-orm'
 import * as schema from '../db/schemas/schema'
-import * as authSchema from '../db/schemas/auth-schema'
+import * as authSchema from '#layers/auth/server/db/schemas/auth-schema'
 import Database from 'better-sqlite3'
 import process from 'node:process'
 import { resolve } from 'node:path'
@@ -57,7 +57,7 @@ export function useDB() {
 
     const close = () => {
       try { sqlite.close() } catch {
-        console.error('Error closing database connection', e)
+        console.error('Error closing database connection')
       }
     }
     process.once('SIGINT', close)

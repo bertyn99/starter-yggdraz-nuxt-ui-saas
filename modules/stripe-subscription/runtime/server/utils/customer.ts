@@ -1,6 +1,6 @@
 import type { H3Event, EventHandlerRequest } from 'h3'
 import { useServerStripe } from '#stripe/server'
-import { users } from '~~/server/db/schemas/auth-schema'
+import { users } from '#layers/auth/server/db/schemas/auth-schema'
 import { eq } from 'drizzle-orm'
 
 export async function getOrCreateCustomerId(user: { id: string, email?: string, name?: string }, event: H3Event<EventHandlerRequest>): Promise<string | null> {

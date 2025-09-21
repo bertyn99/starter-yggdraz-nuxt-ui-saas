@@ -37,6 +37,7 @@
     "@nuxtjs/seo": "^3.1.0",
     "@unlok-co/nuxt-stripe": "5.0.0",
     "better-sqlite3": "^12.2.0",
+    "defu": "^6.1.4",
     "nuxt": "^4.0.3",
     "nuxt-auth-utils": "^0.5.23",
     "nuxt-security": "^2.3.0",

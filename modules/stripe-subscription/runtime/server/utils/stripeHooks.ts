@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm'
-import { users } from '~~/server/db/schemas/auth-schema'
+import { users } from '#layers/auth/server/db/schemas/auth-schema'
 import { subscriptions } from '~~/server/db/schemas/subscription'
 import { STRIPE_LOOKUP_TO_PLAN, DEFAULT_PLAN } from '../../plans'
 import type { H3Event, EventHandlerRequest } from 'h3'

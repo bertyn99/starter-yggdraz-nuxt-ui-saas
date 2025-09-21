@@ -1,8 +1,7 @@
 // server/api/auth/signup.post.ts
 import * as argon2 from '@node-rs/argon2'
-import { users, accounts } from '../../db/schemas/auth-schema'
-import { signupSchema } from '../../../shared/schemas/auth'
-import { sessionService } from '../../utils/session'
+import { users, accounts } from '#layers/auth/server/db/schemas/auth-schema'
+import { signupSchema } from '#shared/schemas/auth'
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, signupSchema.parse)

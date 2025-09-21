@@ -2,7 +2,7 @@ import { defineEventHandler, readBody, createError, getRequestURL } from 'h3'
 import { useServerStripe } from '#stripe/server'
 import { eq } from 'drizzle-orm'
 import { subscriptions } from '~~/server/db/schemas/subscription'
-import { users } from '~~/server/db/schemas/auth-schema'
+import { users } from '#layers/auth/server/db/schemas/auth-schema'
 import { STRIPE_LOOKUP_TO_PLAN } from '../../plans'
 
 export default defineEventHandler(async (event) => {
