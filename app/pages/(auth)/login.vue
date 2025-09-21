@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loginSchema, type LoginSchema } from '#shared/schemas/auth'
+import { loginSchema, type LoginSchema } from '~~/layers/auth/shared/schemas/auth'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 definePageMeta({

@@ -39,7 +39,6 @@
     "better-sqlite3": "^12.2.0",
     "defu": "^6.1.4",
     "nuxt": "^4.0.3",
-    "nuxt-auth-utils": "^0.5.23",
     "nuxt-security": "^2.3.0",
     "zod": "^4.0.17"
   },
